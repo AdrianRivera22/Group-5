@@ -121,18 +121,15 @@
   border: 2px solid #6e2424;
   transition: all 0.3s ease;
 }
-
 .radio-button__input:checked + .radio-button__label .radio-button__custom {
   background-color: #821111;
   border-color: transparent;
   transform: scale(0.8);
   box-shadow: 0 0 20px #a4131380;
 }
-
 .radio-button__input:checked + .radio-button__label {
   color: #d01616;
 }
-
 .radio-button__label:hover .radio-button__custom {
   transform: scale(1.2);
   border-color: #e64343;
@@ -141,6 +138,7 @@
   </style>
 </head>
 <body>
+   <!-- description container -->
   <div class="description-container">
     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiSTZ9cupaQdzXvPz2E_1EUoAyzxlC_tT94Q&s" alt="Delicious Cookies">
     <h1>Welcome to Cravory!</h1>
@@ -158,6 +156,7 @@
       <img src="https://scontent.fcgy2-3.fna.fbcdn.net/v/t1.15752-9/488242590_1248674150245882_7108532131133641860_n.jpg?stp=dst-jpg_s480x480_tt6&_nc_cat=111&ccb=1-7&_nc_sid=0024fc&_nc_eui2=AeF_abd4cCrOAxqfB_zotT-xpEjqEVrLo8CkSOoRWsujwGRZ6o1aDYjqXJG7FyZ3965M_8bycGdh4cnpet003Oaz&_nc_ohc=u-40o-gTydgQ7kNvwEeJalr&_nc_oc=AdnpuCQ1QvyKx1S_F2kbgF4KqwkitY0s9jOA1P1Ap6BtgEoKJbdecUPpdYH31djw8SY&_nc_ad=z-m&_nc_cid=1119&_nc_zt=23&_nc_ht=scontent.fcgy2-3.fna&oh=03_Q7cD2AEHiymVi1x5I7Q-iNvijEFSFxlAPFuVDHN34OIFps4kkw&oe=682E6E6F" alt="Cravory Logo" class="logo">
       <span class="site-title">Cravory</span>
     </div>
+     <!--form input page -->
     <h1 class="text-center mb-4">Create Account</h1>
     <form id="createAccountForm">
       <div class="mb-3">
@@ -250,6 +249,7 @@
       </div>
       </form>
     </body>
+   <!--toggle icon setting -->
       <script>
         function togglePasswordVisibility(inputId, iconId) {
           const input = document.getElementById(inputId);
@@ -277,6 +277,7 @@
     </form>
   </div>
 
+   <!--birthyear and password validation -->
   <script>
     const yearDropdown = document.getElementById("birthYear");
     const currentYear = new Date().getFullYear();
@@ -295,6 +296,7 @@
         option.textContent = day;
         dayDropdown.appendChild(option);
       }
+      
     }
     const form = document.getElementById("createAccountForm");
     const passwordInput = document.getElementById("password");
