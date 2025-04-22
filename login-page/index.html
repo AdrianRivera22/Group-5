@@ -138,7 +138,8 @@
       background-color: white;
       transform: scale(1.05);
       box-shadow: 13px 13px 100px #969696, -13px -13px 100px #ffffff;
-    }@media (max-width: 360px) {
+    }
+    @media (max-width: 360px) {
     .form-container {
       margin: 10px;
       padding: 15px;
@@ -164,6 +165,9 @@
       <img src="https://scontent.fcgy2-3.fna.fbcdn.net/v/t1.15752-9/488242590_1248674150245882_7108532131133641860_n.jpg?stp=dst-jpg_s480x480_tt6&_nc_cat=111&ccb=1-7&_nc_sid=0024fc&_nc_eui2=AeF_abd4cCrOAxqfB_zotT-xpEjqEVrLo8CkSOoRWsujwGRZ6o1aDYjqXJG7FyZ3965M_8bycGdh4cnpet003Oaz&_nc_ohc=u-40o-gTydgQ7kNvwEeJalr&_nc_oc=AdnpuCQ1QvyKx1S_F2kbgF4KqwkitY0s9jOA1P1Ap6BtgEoKJbdecUPpdYH31djw8SY&_nc_ad=z-m&_nc_cid=1119&_nc_zt=23&_nc_ht=scontent.fcgy2-3.fna&oh=03_Q7cD2AEHiymVi1x5I7Q-iNvijEFSFxlAPFuVDHN34OIFps4kkw&oe=682E6E6F" alt="Logo" class="img-fluid" style="width: 50px; height: 50px; margin-right: 10px; border-radius: 100%;" />
       <h4 class="mb-0" style="color: #7b1919; font-weight: bold;">Cravory</h4>
     </div>
+    
+    <!--login page -->
+      
     <h1 class="text-center">LOGIN</h1>
     <form id="loginForm">
       <div class="mb-3">
@@ -191,7 +195,7 @@
     <div class="form-footer d-flex justify-content-between mt-3">
       <button type="button" class="btn btn-danger" onclick="window.location.href='register/'">Sign up</button>
     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">Forgot Password</button>
-
+    <!--forget password modal -->
     <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -211,7 +215,7 @@
         </div>
       </div>
     </div>
-
+    <!--reset password modal -->
     <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -237,6 +241,7 @@
     </div>
 
     <script>
+      
       document.getElementById("submitForgotEmail").addEventListener("click", function () {
         const email = document.getElementById("forgotEmail").value.trim();
         if (email) {
@@ -272,6 +277,7 @@
       });
     </script>
     </div>
+     <!--social media buttons -->
     <p class="text-center mt-3" style="color: red;">Or sign in with</p>
     <div class="social-buttons">
       <button class="instagram">
