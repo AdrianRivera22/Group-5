@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cravory</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="css\style.css">
+    <link rel="stylesheet" href="css\nav.css">
+</head>
+<body>
+
+    <main>
+        <nav>
+            <div class="logo">
+                <h3>Cravory</h3>
+            </div>
+            <div class="hamburger">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Menu</a></li>
+                <li><a href="" class="nav-cta-button" href="#">Contact</a></li>
+                <script src="js/navigation.js"></script>
+            </ul>   
+        </nav>
+        <div class="container fluid">
+            <div class="slideshow-container">
+                <div class="slides">
+                    <img src="img/beef-caldereta.png" alt="beef-caldereta" class="transition">
+                    <div class="backgroundOne fades"></div>
+                    <div class="adv">
+                        <!--<p>Welcome to Cravory</p>-->
+                    </div>
+                </div>
+                <div class="slides">
+                    <img src="img/fried-meat-ribs-with-vegetables-potatoes-removebg-preview.png" alt="fried-meat-ribs-with-vegetables-potatoes-removebg-preview" class="transition">
+                    <div class="backgroundTwo fades"></div>
+                    <div class="adv"></div>
+                </div>
+                <div class="slides">
+                    <img src="img/sushi.png" alt="sushi" class="transition">
+                    <div class="backgroundThree fades"></div>
+                    <div class="adv"></div>
+                </div>
+            </div>
+            <section>
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+            <div style="text-align: center;">
+                <span class="dot" onclick="currentSlides(1)"></span>
+                <span class="dot" onclick="currentSlides(2)"></span>
+                <span class="dot" onclick="currentSlides(3)"></span>
+            </div>
+            <script src="js/app.js"></script>
+            <div class="row mt-5">
+                <div class="col-md-4 text-center">
+                    <h2>Feature 1</h2>
+                    <p>Description of feature 1.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <h2>Feature 2</h2>
+                    <p>Description of feature 2.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <h2>Feature 3</h2>
+                    <p>Description of feature 3.</p>
+                </div>
+            </section>
+        </div>
+</body>
+</html>
