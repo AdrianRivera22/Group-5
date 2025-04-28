@@ -1,0 +1,281 @@
+
+        :root {
+            --primary-color: #28a745; /* Green */
+            --secondary-color: #f8f9fa; /* Light grey */
+            --dark-color: #343a40;
+            --light-color: #ffffff;
+            --text-color: #495057;
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --border-radius: 8px;
+        }
+
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: #f4f4f4;
+        }
+
+        h1, h2, h3 {
+            color: var(--dark-color);
+            margin-bottom: 0.75em;
+        }
+
+        h1 { font-size: 2.5em; }
+        h2 { font-size: 2em; text-align: center; margin-bottom: 1.5em;}
+        h3 { font-size: 1.5em; border-bottom: 1px solid #eee; padding-bottom: 0.5em; margin-top: 1.5em; }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            padding: 60px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            background-color: var(--light-color);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #eee;
+        }
+
+        #hero {
+            position: relative;
+            text-align: center;
+            padding: 100px 20px;
+            color: var(--light-color);
+            background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'); /* Example food image */
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            margin: 0;
+            max-width: none;
+        }
+
+        #hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+            border-radius: inherit;
+        }
+
+        #hero > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        #hero h1 {
+             color: var(--light-color);
+             font-weight: bold;
+        }
+        #hero p {
+            font-size: 1.2em;
+            margin-bottom: 25px;
+        }
+
+        .hero-cta-button {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            color: var(--light-color);
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .hero-cta-button:hover {
+            background-color: #218838;
+            text-decoration: none;
+        }
+
+        #CreateStore {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+            margin-top: 40px;
+             max-width: 800px;
+        }
+
+        #CreateStore form {
+             padding: 30px;
+             border: none;
+             border-radius: 0;
+             margin: 0;
+             max-width: none;
+        }
+
+        #CreateStore form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        #CreateStore form input[type="text"],
+        #CreateStore form input[type="email"],
+        #CreateStore form input[type="number"],
+        #CreateStore form textarea,
+        #CreateStore form input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ced4da;
+            border-radius: var(--border-radius);
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+        #CreateStore form input[type="file"] {
+            padding: 5px;
+        }
+
+        #CreateStore form textarea {
+            resize: vertical;
+        }
+
+        .food-items-container {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .food-item {
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #e9ecef;
+            border-radius: var(--border-radius);
+            background-color: #fdfdfd;
+        }
+        .food-item h4 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        #add-food-item-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+         #add-food-item-btn:hover {
+            background-color: #5a6268;
+        }
+
+        .submit-button-container {
+             margin-top: 30px;
+             text-align: center;
+             padding-top: 20px;
+             border-top: 2px solid #eee;
+        }
+
+        .submit-button-container button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .submit-button-container button:hover {
+            background-color: #218838;
+        }
+
+        #Contact {
+            background-color: var(--secondary-color);
+            text-align: center;
+        }
+        #Contact p {
+            font-size: 1.1em;
+        }
+
+        footer {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+        }
+        footer p {
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.75em; }
+            h3 { font-size: 1.25em; }
+            #hero { padding: 60px 20px; }
+        }
+
+@media (max-width: 480px) {
+    #hero {
+        padding: 50px 10px; /* Reduce padding for smaller screens */
+    }
+
+    h1 {
+        font-size: 1.8em; /* Adjust heading size for smaller screens */
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    #CreateStore {
+        padding: 20px; /* Reduce padding for the form section */
+    }
+
+    #CreateStore form input,
+    #CreateStore form textarea,
+    #CreateStore form button {
+        font-size: 0.9em; /* Adjust font size for inputs and buttons */
+    }
+
+    .food-item {
+        padding: 15px; /* Reduce padding for food items */
+    }
+
+    footer {
+        padding: 20px 10px; /* Reduce footer padding */
+    }
+}
+
+@media (max-width: 360px) {
+    h1 {
+        font-size: 1.5em; /* Further reduce heading size */
+    }
+
+    .hero-cta-button {
+        font-size: 0.9em; /* Adjust button font size */
+        padding: 10px 20px; /* Adjust button padding */
+    }
+
+    .food-item {
+        margin-bottom: 15px; /* Reduce spacing between food items */
+    }
+}
