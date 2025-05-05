@@ -16,22 +16,23 @@
     }
 
     html, body {
-      height: 100%; 
+      height: 100%; /* Ensure html and body take full height */
       margin: 0;
     }
 
     body {
+      /* Background image setup */
       background-image: url('https://img.freepik.com/premium-photo/set-dishes-seafood-meat-vegetables-photo-collage-banner_187166-502.jpg?w=740');
       background-size: cover;
       background-position: center;
       display: flex;
       justify-content: center;
       align-items: center;
-      position: relative;
-      padding: 1rem; 
+      position: relative; /* Needed for overlay */
+      padding: 1rem; /* Add padding for smaller screens */
     }
 
-  
+    /* Dark overlay for better contrast */
     body::before {
       content: "";
       position: absolute;
@@ -39,36 +40,36 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: rgba(0, 0, 0, 0.5); 
+      background-color: rgba(0, 0, 0, 0.5); /* Slightly darker overlay */
       z-index: 1;
     }
 
     .form-container {
-      position: relative; 
+      position: relative; /* Ensure form is above overlay */
       z-index: 2;
-      background: #ffffff; 
-      padding: 2.5rem; 
-      border-radius: 0.75rem; 
-      box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2); 
+      background: #ffffff; /* Solid white background */
+      padding: 2.5rem; /* More padding */
+      border-radius: 0.75rem; /* Slightly larger radius */
+      box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2); /* More pronounced shadow */
       text-align: left;
-      max-width: 430px; 
-      width: 100%; 
-      border-top: 5px solid var(--brand-color); 
-      border-left: 1px solid #dee2e6;
+      max-width: 430px; /* Consistent width */
+      width: 100%; /* Responsive width */
+      border-top: 5px solid var(--brand-color); /* Brand color top border */
+      border-left: 1px solid #dee2e6; /* Subtle side/bottom borders */
       border-right: 1px solid #dee2e6;
       border-bottom: 1px solid #dee2e6;
     }
 
-  
+    /* Logo styling */
     .logo {
         width: 50px;
         height: 50px;
     }
 
-  
+    /* Title styling */
     .brand-title {
         color: var(--brand-color);
-        font-weight: 700; 
+        font-weight: 700; /* Bolder */
     }
 
     .login-title {
@@ -76,21 +77,21 @@
         font-weight: 700;
     }
 
- 
+    /* Standard label styling */
     .form-label {
       font-weight: 500;
-      color: #495057; 
-      margin-bottom: 0.3rem; 
+      color: #495057; /* Darker grey */
+      margin-bottom: 0.3rem; /* Reduced bottom margin */
     }
 
     /* Inputs */
     .form-control-lg {
-        padding: 0.75rem 1rem; 
-        border-radius: 0.5rem; 
+        padding: 0.75rem 1rem; /* Adjust padding for lg */
+        border-radius: 0.5rem; /* Match container radius */
     }
     .form-control:focus {
         border-color: var(--brand-color-border);
-        box-shadow: 0 0 0 0.25rem rgba(123, 25, 25, 0.25); 
+        box-shadow: 0 0 0 0.25rem rgba(123, 25, 25, 0.25); /* Brand color focus */
     }
 
     /* Password Toggle */
