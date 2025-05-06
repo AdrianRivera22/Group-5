@@ -28,7 +28,6 @@ body{
     animation-duration: 5s;
 }
 
-
 .button {
     text-shadow: 5px 5px 10px rgba(0,0,0,0.5) ;
     text-align: center;
@@ -403,10 +402,9 @@ a{
     color: black;
 }
 .menu{
-    font-family: dakota;
-    padding-top: 220px;
+    font-size: 50px;
+    padding-top: 100px;
     padding-bottom: 30px;
-    font-size: 80px;
 }
 
 .buttonsPrevNext {
@@ -512,7 +510,6 @@ a{
     .label-black{font-size: 30px; padding: 20px; padding-left: 30px;}
     .regular-categories{display: none;}
     .category-slider-container{display: flex; overflow-x: auto;}
-    .menu{font-size: 80px; padding-top: 200px; padding-bottom: 30px;}
     .textHeaderOne{font-size: 200%;}
     .textOne{font-size: 100%; transform: translate(-20%, -5%);}      
     footer h3{
@@ -561,11 +558,11 @@ a{
     .backgroundOne, .backgroundTwo, .backgroundThree{
         border-radius: 10px;
     }
+    .menu{ padding-top: 10px;}
     .textHeader{font-size: 130%;}
     .text{display: none}
     .style{transform: translate(39%,80%); font-size: 130%;}
-    .label{font-size: 50px; padding-top: 100px;}
-    .menu{font-size: 50px; padding-top: 100px; padding-bottom: 30px;}
+    .label{font-size: 50px; padding-top: 50px;}
     .title-footer{
         justify-content: center;
     }
