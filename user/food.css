@@ -1,0 +1,528 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap'); /* Pacifico included from HTML head, but good practice */
+
+/* Custom Font */
+@font-face {
+  font-family: dakota;
+  /* IMPORTANT: Make sure this path is correct relative to your CSS file */
+  src: url(DakotaRegular-eZpj6.ttf);
+}
+
+/* Basic Reset & Box Sizing */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif; /* Default font */
+}
+
+body {
+  background-color: rgb(251, 249, 246);
+  padding-top: 100px; /* Add padding to prevent content from hiding behind fixed nav */
+}
+
+/* Navigation */
+nav {
+  width: 100%;
+  /* Adjust height for responsiveness */
+  min-height: 80px;
+  height: auto; /* Allow height to adjust */
+  display: flex;
+  /* Wrap elements on smaller screens */
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  background: #ff392f; /* Original red */
+  /* Adjusted padding */
+  padding: 10px 15px; /* Less horizontal padding on small screens */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  gap: 10px; /* Add gap between items when wrapping */
+}
+
+/* Responsive adjustments for nav */
+@media (min-width: 768px) { /* md breakpoint */
+  nav {
+    flex-wrap: nowrap; /* Prevent wrapping on larger screens */
+    padding: 10px 30px; /* Restore original padding */
+    min-height: 100px; /* Restore minimum height if needed */
+  }
+  body {
+      padding-top: 120px; /* Adjust body padding for larger nav */
+  }
+}
+
+/* Ensure container takes up appropriate space */
+nav {
+  width: 100%;
+  height: 150px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  background: #ff392f;
+  padding: 10px 30px;
+  box-shadow: 0 0 10px #000;
+  z-index: 1000;
+}
+
+.navbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px 30px;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.logo img {
+  width: 80px;
+  height: 80px;
+  mix-blend-mode: color-dodge;
+}
+
+.logo h3 {
+  margin-left: 10px;
+  font-size: 30px;
+  font-family: dakota;
+  color: ghostwhite;
+}
+
+nav ul {
+  display: flex;
+  align-items: center;
+  transition: right 0.3s ease;
+}
+
+nav ul li {
+  list-style: none;
+  margin: 0 20px;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+  padding: 10px 15px;
+  font-weight: 500;
+}
+
+nav ul li a:hover {
+  background: white;
+  color: #ff392f;
+  border-radius: 10px;
+}
+
+.nav-cta-button {
+  border: 2px solid ghostwhite;
+  border-radius: 50px;
+}
+
+.nav-cta-button:hover {
+  background: ghostwhite;
+  color: #ff392f;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+}
+
+
+
+
+.search-container {
+  flex-grow: 1; /* Allow search to take available space */
+  min-width: 200px; /* Minimum width before wrapping badly */
+  max-width: 400px; /* Optional max width */
+  position: absolute; /* Needed for absolute positioning of icons/button */
+
+  /* --- ADD THESE LINES --- */
+  margin-left: auto;
+  margin-right: auto;
+  
+}
+
+.search-container input {
+  /* Keep or adjust padding-right depending on filter button */
+  padding-right: 60px;
+  width: 100%; /* Ensure input fills the container */
+}
+
+/* Keep the filter button styles if you use it */
+.search-container .filter-button {
+  position: absolute;
+  right: 8px; /* Adjust position */
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 4px 8px; /* Adjust padding */
+}
+
+
+/* Nav actions responsiveness */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Space between action items */
+    flex-shrink: 0;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.hamburger .bar {
+  width: 25px;
+  height: 4px;
+  margin: 3px 0;
+  background-color: ghostwhite;
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  nav {
+    flex-wrap: wrap;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  nav ul {
+    position: fixed;
+    top: 150px;
+    right: -100%;
+    flex-direction: column;
+    background-color: rgb(154, 144, 142);
+    width: 60%;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
+
+  nav ul.active {
+    right: 0;
+  }
+
+  nav ul li {
+    margin: 20px 0;
+  }
+}
+
+@media (max-width: 500px) {
+  nav {
+    flex-wrap: wrap;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  nav ul {
+    position: fixed;
+    top: 120px; 
+    right: -100%;
+    flex-direction: column;
+    background-color: rgb(154, 144, 142);
+    width: 80%; 
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
+
+  nav ul.active {
+    right: 0;
+  }
+
+  nav ul li {
+    margin: 15px 0;
+  }
+}
+
+
+
+@media (min-width: 768px) {
+    .nav-actions {
+        gap: 20px; /* More space on larger screens */
+    }
+}
+
+/* Region/Category Filter Section */
+.select-wrapper {
+  padding: 20px 15px; /* Add padding */
+  background-color: #fff; /* Give it a background */
+  margin-bottom: 20px; /* Space below */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.regions {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+  gap: 10px; /* Space between items */
+  justify-content: center; /* Center items */
+}
+.regionvalue {
+  padding: 8px 15px;
+  cursor: pointer;
+  border: 1px solid #e5e7eb; /* Light border */
+  border-radius: 9999px; /* Pill shape */
+  font-size: 14px;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  background-color: #f9fafb; /* Default background */
+  color: #374151; /* Default text color */
+}
+.regionvalue:hover {
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+}
+.regionvalue.active {
+  background-color: #FF6B35; /* Primary color */
+  color: white;
+  border-color: #FF6B35;
+  font-weight: 500;
+}
+
+/* Main Content Area */
+.main-content {
+    padding: 0 15px; /* Add padding */
+}
+@media (min-width: 768px) {
+    .main-content {
+        padding: 0 30px; /* More padding on larger screens */
+    }
+}
+
+/* Food Grid */
+.food-grid {
+    margin-top: 20px; /* Space above grid */
+}
+
+/* Food Item Card */
+.food-item {
+  cursor: pointer; /* Indicate items are clickable */
+}
+.food-item .relative.h-48 {
+    height: 12rem; /* Consistent height */
+}
+@media (min-width: 640px) { /* sm */
+    .food-item .relative.h-48 {
+        height: 10rem; /* Adjust height on medium screens */
+    }
+}
+@media (min-width: 1024px) { /* lg */
+    .food-item .relative.h-48 {
+        height: 12rem; /* Restore height on large screens */
+    }
+}
+
+/* --- Animations (Keep these) --- */
+:where([class^="ri-"])::before { content: "\f3c2"; } /* Check if this default is needed */
+.quantity-updated {
+  animation: quantityPulse 0.3s ease-in-out;
+}
+.price-updated {
+  animation: pricePulse 0.3s ease-in-out;
+}
+.count-updated {
+  animation: countPulse 0.3s ease-in-out;
+}
+@keyframes quantityPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); color: #FF6B35; }
+  100% { transform: scale(1); }
+}
+@keyframes pricePulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; color: #FF6B35; }
+  100% { opacity: 1; }
+}
+@keyframes countPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); background-color: #FF6B35; }
+  100% { transform: scale(1); }
+}
+
+/* --- Custom Controls (Keep if used, consider Tailwind alternatives) --- */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Styles for custom checkbox, radio, switch, range-slider are fine */
+/* ... (keep existing custom control styles) ... */
+
+/* --- Panel/Modal Transitions (Keep these) --- */
+.cart-panel {
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+}
+.cart-panel.open {
+  transform: translateX(0);
+}
+.overlay {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  background-color: rgba(0, 0, 0, 0.5); /* Ensure background color is set */
+}
+.overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+.food-detail-modal {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.95) translateY(20px); /* Add scale transform */
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+.food-detail-modal.open {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1) translateY(0); /* Animate to full scale */
+}
+
+/* Ensure modal content is scrollable if it overflows */
+.food-detail-modal .flex-1.overflow-y-auto {
+    max-height: calc(90vh - 120px); /* Adjust max-height considering header/footer */
+}
+
+/* Cart Panel Responsiveness */
+@media (max-width: 639px) { /* Below sm breakpoint */
+  .cart-panel {
+    width: 100%; /* Full width on small screens */
+  }
+}
+
+/* Toast Notification Style */
+#cartToast {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  background-color: white;
+  border-radius: 0.5rem; /* rounded-lg */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+  padding: 1rem; /* p-4 */
+  z-index: 1050; /* Ensure it's above most elements */
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem; /* space-x-3 */
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  max-width: 350px; /* Limit width */
+}
+
+#cartToast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ============================ */
+/* Footer Styles                */
+/* ============================ */
+
+.site-footer {
+  background-color: bisque; /* Or use a CSS variable: var(--footer-bg-color); */
+  color: #654321; /* A brownish color for default text - adjust as needed */
+  padding: 50px 0; /* Vertical padding */
+  font-size: 14px; /* Base font size for footer content */
+  line-height: 1.6;
+}
+
+.footer-container {
+  max-width: 1140px; /* Adjust to your site's max container width */
+  margin: 0 auto; /* Center the container */
+  padding: 0 15px; /* Horizontal padding for smaller screens */
+}
+
+.footer-grid {
+  display: grid;
+  gap: 30px; /* Spacing between columns */
+
+  /* Mobile: 1 column */
+  grid-template-columns: 1fr;
+  text-align: center; /* Center text on mobile */
+}
+
+/* Tablet: 2 columns */
+@media (min-width: 576px) { /* Adjust breakpoint if needed */
+  .footer-grid {
+      grid-template-columns: repeat(2, 1fr);
+      text-align: left; /* Left align text on larger screens */
+  }
+}
+
+/* Desktop: 4 columns */
+@media (min-width: 992px) { /* Adjust breakpoint if needed */
+  .footer-grid {
+      grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.footer-column {
+  /* No specific styles needed unless you want padding inside columns */
+}
+
+.footer-heading {
+  font-size: 18px; /* Heading size */
+  font-weight: bold; /* Replaces fw-bold */
+  color: brown; /* The specific heading color */
+  margin-bottom: 15px; /* Space below heading */
+  text-transform: uppercase; /* Optional: if you want uppercase */
+}
+
+.footer-tagline {
+  margin-bottom: 10px;
+}
+
+/* Styling for lists (contact, links) */
+.footer-column ul {
+  list-style: none; /* Remove default bullets */
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column li {
+  margin-bottom: 8px; /* Space between list items */
+}
+
+/* Last item in a list might not need bottom margin */
+.footer-column li:last-child {
+  margin-bottom: 0;
+}
+
+.footer-column a {
+  color: inherit; /* Use the default column text color */
+  text-decoration: none; /* Remove underline */
+  transition: color 0.2s ease-in-out; /* Smooth hover effect */
+}
+
+.footer-column a:hover,
+.footer-column a:focus {
+  color: #a0522d; /* Example hover color (Sienna) - adjust */
+  text-decoration: underline; /* Add underline on hover/focus */
+}
+
+/* Copyright Styles (Optional) */
+.footer-copyright {
+  text-align: center;
+  margin-top: 40px; /* Space above copyright */
+  padding-top: 20px; /* Space below the border */
+  border-top: 1px solid rgba(101, 67, 33, 0.2); /* Subtle border using the text color */
+  font-size: 12px;
+  color: #8b4513; /* Slightly darker brown - adjust */
+}
