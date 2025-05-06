@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cravory - Food Details on Click</title>
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- <link rel="icon" href="assets/images/favicon.png" type="image/png"> -->
+
+    <style>
+        /* === Google Fonts === */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        /* === CSS Variables === */
+        :root {
+            --primary-color: #d32f2f;
+            --primary-color-dark: #b71c1c;
+            --secondary-color: #ffc107;
+            --text-dark: #212529;
+            --text-light: #6c757d;
+            --body-bg: #fdfaf6;
+            --card-bg: #ffffff;
+            --white-color: #ffffff;
+            --border-light: #dee2e6;
+            --shadow-light: rgba(0, 0, 0, 0.06);
+            --shadow-medium: rgba(0, 0, 0, 0.1);
+            --header-height: 70px;
+            --border-radius-sm: 0.25rem;
+            --border-radius-md: 0.375rem;
+            --border-radius-lg: 0.5rem;
+            --container-width: 1140px;
+            --container-padding: 15px;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        /* === Base & Resets === */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body { font-family: var(--font-family); line-height: 1.6; color: var(--text-dark); background-color: var(--body-bg); overflow-x: hidden; }
+        a { text-decoration: none; color: var(--primary-color); transition: color 0.3s ease; }
+        a:hover { color: var(--primary-color-dark); }
+        ul { list-style: none; }
+        img { max-width: 100%; height: auto; display: block; vertical-align: middle; }
+        button { cursor: pointer; border: none; background: none; font-family: inherit; color: inherit; }
+
+        /* === Utilities === */
+        .container { max-width: var(--container-width); margin-left: auto; margin-right: auto; padding-left: var(--container-padding); padding-right: var(--container-padding); }
+        .section-heading { text-align: center; font-size: 2.2rem; font-weight: 600; color: var(--text-dark); margin-bottom: 1.5rem; }
+        .text-center { text-align: center; }
+        .d-none { display: none !important; }
+
+        /* === Navigation === */
+        nav { position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height); background-color: var(--white-color); box-shadow: 0 2px 10px var(--shadow-light); z-index: 1000; display: flex; align-items: center; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .logo { display: flex; align-items: center; gap: 0.6rem; color: var(--text-dark); text-decoration: none; }
+        .logo-img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
+        .logo-name { font-size: 1.6rem; font-weight: 700; color: var(--primary-color); margin-bottom: 0; }
+        .nav-links { display: flex; align-items: center; gap: 2.5rem; }
+        .nav-link { font-size: 1rem; font-weight: 500; color: var(--text-light); position: relative; padding: 5px 0; }
+        .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background-color: var(--primary-color); transition: width 0.3s ease; }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .nav-link:hover, .nav-link.active { color: var(--primary-color); }
+        .nav-cta-button { background-color: var(--primary-color); color: var(--white-color) !important; padding: 0.6rem 1.5rem; border-radius: var(--border-radius-md); font-weight: 600; transition: background-color 0.3s ease; }
+        .nav-cta-button:hover { background-color: var(--primary-color-dark); color: var(--white-color) !important; }
+        .nav-cta-button::after { display: none; }
+        .nav-actions { display: flex; align-items: center; }
+        .hamburger { display: none; cursor: pointer; }
+        .hamburger .bar { display: block; width: 25px; height: 3px; margin: 5px auto; background-color: var(--text-dark); transition: all 0.3s ease-in-out; border-radius: 2px; }
+
+        /* === Main Content === */
+        main { padding-top: calc(var(--header-height) + 1rem); padding-bottom: 3rem; }
+        .utility-section { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding-top: 1rem; padding-bottom: 1rem; margin-bottom: 2rem; gap: 1rem; }
+        .search-box { position: relative; display: flex; align-items: center; background-color: var(--white-color); border-radius: var(--border-radius-lg); padding: 0.6rem 1.2rem; box-shadow: 0 2px 8px var(--shadow-light); flex-grow: 1; max-width: 450px; border: 1px solid var(--border-light); }
+        .search-box .search-icon { font-size: 1.2rem; color: var(--text-light); margin-right: 0.75rem; }
+        .search-box input { border: none; outline: none; background: none; font-size: 1rem; width: 100%; color: var(--text-dark); }
+        .search-box input::placeholder { color: #adb5bd; }
+        .action-icons { display: flex; align-items: center; gap: 1.5rem; margin-left: 1rem; }
+        .utility-icon { font-size: 1.7rem; color: var(--text-light); cursor: pointer; transition: color 0.3s ease; }
+        .utility-icon:hover { color: var(--primary-color); }
+        .cart-icon-wrapper { position: relative; cursor: pointer; }
+        .cart-count { position: absolute; top: -5px; right: -8px; background-color: var(--primary-color); color: var(--white-color); font-size: 0.7rem; font-weight: 600; width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 1px solid var(--white-color); }
+        .menu-heading-section { padding-bottom: 1rem; }
+        .category-section { padding-top: 2rem; padding-bottom: 2.5rem; }
+        .category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-light); }
+        .category-title { font-size: 1.6rem; font-weight: 600; color: var(--text-dark); }
+        .see-all-btn { font-size: 0.95rem; font-weight: 500; color: var(--primary-color); display: inline-flex; align-items: center; gap: 0.2rem; }
+        .see-all-btn i { font-size: 1.2rem; transition: transform 0.2s ease; }
+        .see-all-btn:hover i { transform: translateX(3px); }
+        .category-swiper { width: 100%; padding-top: 10px; padding-bottom: 50px; }
+        .card-item { background-color: var(--card-bg); border-radius: var(--border-radius-lg); overflow: hidden; box-shadow: 0 5px 15px var(--shadow-light); transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, visibility 0.3s ease; display: flex; flex-direction: column; height: 100%; visibility: visible; opacity: 1;}
+        .card-item.filtered-out { opacity: 0; visibility: hidden; max-height: 0; overflow: hidden; margin: 0 !important; padding: 0 !important; border: none !important;}
+        .card-item:hover { transform: translateY(-6px); box-shadow: 0 10px 20px var(--shadow-medium); }
+        .card-image { width: 100%; height: 220px; object-fit: cover; }
+        .food-image-clickable { cursor: pointer; } /* Added */
+        .card-content { padding: 1.2rem; flex-grow: 1; display: flex; flex-direction: column; }
+        .menu-name { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.6rem; color: var(--text-dark); line-height: 1.3; flex-grow: 1; }
+        .price { font-size: 1.05rem; font-weight: 600; color: var(--primary-color); margin-bottom: 1rem; }
+        .add-to-cart-btn { background-color: var(--primary-color); color: var(--white-color); border: none; border-radius: var(--border-radius-md); padding: 0.6rem; font-size: 1.4rem; cursor: pointer; transition: background-color 0.3s ease; align-self: flex-end; line-height: 1; display: inline-flex; align-items: center; justify-content: center; }
+        .add-to-cart-btn:hover { background-color: var(--primary-color-dark); }
+        .swiper-pagination { bottom: 15px !important; }
+        .swiper-pagination-bullet { background-color: var(--text-light); opacity: 0.6; width: 10px; height: 10px; }
+        .swiper-pagination-bullet-active { background-color: var(--primary-color); opacity: 1; }
+        .swiper-nav-btn { color: var(--primary-color) !important; background-color: rgba(255, 255, 255, 0.85); border-radius: 50%; width: 44px !important; height: 44px !important; transition: background-color 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .swiper-nav-btn::after { font-size: 1.3rem !important; font-weight: bold; }
+        .swiper-nav-btn:hover { background-color: var(--white-color); }
+        .swiper-button-disabled { opacity: 0.35 !important; cursor: default !important; }
+        .contact-section { padding: 4rem 0; text-align: center; background-color: #e9ecef; margin-top: 3rem; border-top: 1px solid var(--border-light); }
+        .contact-section p { color: var(--text-light); margin-top: 0.5rem; }
+        .footer { background-color: #343a40; color: #adb5bd; padding: 2rem 0; text-align: center; margin-top: 0; font-size: 0.9rem; }
+        .footer .container { display: flex; flex-direction: column; align-items: center; gap: 0.5rem;}
+        .footer-links a { color: #adb5bd; margin: 0 0.5rem; }
+        .footer-links a:hover { color: var(--white-color); text-decoration: underline;}
+
+        #cartModal .modal-dialog { max-width: 600px; }
+        #cartModal .modal-header { background-color: var(--primary-color); color: var(--white-color);}
+        #cartModal .btn-close { filter: invert(1) grayscale(100%) brightness(200%); }
+        .cart-item { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border-light); gap: 1rem;}
+        .cart-item:last-child { border-bottom: none; }
+        .cart-item-img { width: 50px; height: 50px; object-fit: cover; border-radius: var(--border-radius-sm); margin-right: 0.5rem; }
+        .cart-item-details { flex-grow: 1; }
+        .cart-item-name { font-weight: 500; }
+        .cart-item-price { font-size: 0.9rem; color: var(--text-light); }
+        .cart-item-quantity-controls { display: flex; align-items: center; gap: 0.5rem; }
+        .cart-item-quantity { font-weight: 500; min-width: 25px; text-align: center; }
+        .cart-quantity-btn { font-size: 1.1rem; padding: 0.1rem 0.4rem; line-height: 1; background-color: #eee; border-radius: var(--border-radius-sm); }
+        .cart-quantity-btn:hover { background-color: #ddd; }
+        .cart-item-actions button.remove-item-btn { font-size: 0.9rem; padding: 0.2rem 0.5rem; }
+        .cart-total { margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid var(--text-dark); text-align: right; font-size: 1.2rem; font-weight: 600;}
+
+        #addToCartConfirmModal .modal-dialog { max-width: 350px; }
+        #addToCartConfirmModal .modal-content { background-color: #d1e7dd; border-color: #badbcc;}
+        #addToCartConfirmModal .modal-body { text-align: center; font-weight: 500; color: #0f5132; padding: 1.5rem 1rem;}
+        #addToCartConfirmModal .modal-header, #addToCartConfirmModal .modal-footer { display: none; }
+
+        #foodDetailModal .modal-header { border-bottom: none; }
+        #foodDetailModal .modal-body { padding-top: 0.5rem; }
+        #foodDetailImage { max-height: 400px; object-fit: cover; width: 100%;}
+
+        @media (max-width: 992px) { .nav-links { gap: 1.5rem; } .container { max-width: 960px; } .category-swiper { padding-bottom: 55px; } }
+        @media (max-width: 768px) { :root { --header-height: 65px; } .nav-links { position: fixed; left: -100%; top: var(--header-height); flex-direction: column; background-color: var(--white-color); width: 100%; height: calc(100vh - var(--header-height)); text-align: center; transition: left 0.35s ease-in-out; gap: 1.5rem; padding-top: 2rem; box-shadow: 5px 0 15px var(--shadow-light); } .nav-links.active { left: 0; } .nav-link { font-size: 1.1rem; } .nav-cta-button { padding: 0.8rem 2rem; width: 80%; max-width: 250px; margin: 1rem auto; } .hamburger { display: block; z-index: 1001; } .hamburger.active .bar:nth-child(2) { opacity: 0; } .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); } .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); } main { padding-top: calc(var(--header-height) + 0.5rem); } .utility-section { flex-direction: column; gap: 1rem; align-items: stretch; } .search-box { max-width: none; } .action-icons { justify-content: flex-end; margin-left: 0; } .section-heading { font-size: 1.8rem; margin-bottom: 1rem;} .category-title { font-size: 1.4rem; } .swiper-nav-btn { display: none; } #foodDetailModal .modal-body { flex-direction: column; } }
+        @media (max-width: 576px) { html { font-size: 15px; } :root { --header-height: 60px; } .logo-img { width: 40px; height: 40px;} .logo-name { font-size: 1.4rem; } .category-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; } .card-item { border-radius: var(--border-radius-md); } .card-content { padding: 1rem; } .card-image { height: 180px; } .menu-name { font-size: 1rem; } .price { font-size: 0.95rem; } .add-to-cart-btn { font-size: 1.2rem; padding: 0.5rem; } .section-heading { font-size: 1.6rem; } .category-title { font-size: 1.25rem; } .utility-section { padding-top: 0.5rem; margin-bottom: 1.5rem;} .search-box { padding: 0.5rem 1rem;} .action-icons { gap: 1rem;} .utility-icon { font-size: 1.5rem;} .cart-count { width: 18px; height: 18px; font-size: 0.65rem;} .footer { padding: 1.5rem 0;} #cartModal .modal-dialog { max-width: 95%; margin: 1rem auto;} }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container container">
+            <a href="#" class="logo">
+                <img src="BearCat.png.jpg" alt="Cravory logo" class="logo-img">
+                <h3 class="logo-name">Cravory</h3>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link active">Home</a></li>
+                <li><a href="#categories-section" class="nav-link">Categories</a></li>
+                <li><a href="#menu-section" class="nav-link">Menu</a></li>
+                <li><a href="#contact-section" class="nav-link">Contact</a></li>
+                <a href="login.html" class="btn btn-outline-danger logout-button">
+                  <i class="fas fa-sign-out-alt"></i> Logout
+              </a>
+            </ul>
+            <div class="nav-actions">
+                <div class="hamburger">
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="utility-section container">
+            <div class="search-box">
+                <i class="uil uil-search search-icon"></i>
+                <input type="text" id="searchInput" placeholder="Search dishes..." />
+            </div>
+            <div class="action-icons">
+                <div class="cart-icon-wrapper" id="cartIconWrapper" data-bs-toggle="modal" data-bs-target="#cartModal">
+                    <i class='bx bx-cart-alt utility-icon cart-icon'></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="menu-heading-section container" id="menu-section">
+            <h1 class="section-heading">Discover Our Menu</h1>
+        </section>
+
+        <section class="category-section container" id="categories-section">
+            <div class="category-header">
+                <h2 class="category-title">Filipino Favorites</h2>
+                <a href="#" class="see-all-btn">See All <i class='bx bx-chevron-right'></i></a>
+            </div>
+            <div class="swiper category-swiper">
+                <div class="swiper-wrapper">
+                    <div class="card-item swiper-slide" data-id="fil-bat" data-name="Batchoy" data-price="50.00" data-img="Batchoy.jpg" data-description="A hearty Filipino noodle soup made with pork offal, crushed chicharron, chicken stock, beef loin, and round noodles. A comforting classic!">
+                        <img src="Batchoy.jpg" alt="Batchoy" class="card-image food-image-clickable">
+                        <div class="card-content">
+                            <h3 class="menu-name">Batchoy</h3>
+                            <p class="price">₱50.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Batchoy to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide" data-id="fil-bik" data-name="Biko" data-price="15.00" data-img="Biko Recipe (Filipino Sticky Rice Cake) - Foxy Folksy.jpg" data-description="A sweet Filipino rice cake made from glutinous rice cooked in coconut milk and brown sugar, topped with latik (cooked coconut curds).">
+                        <img src="Biko Recipe (Filipino Sticky Rice Cake) - Foxy Folksy.jpg" alt="Biko" class="card-image food-image-clickable">
+                         <div class="card-content">
+                            <h3 class="menu-name">Biko</h3>
+                            <p class="price">₱15.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Biko to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide" data-id="fil-hal" data-name="Halo-halo" data-price="40.00" data-img="34 Signs You Grew Up Filipino.jpg" data-description="A popular Filipino cold dessert which is a concoction of crushed ice, evaporated milk or condensed milk, and various ingredients including ube halaya, sweetened beans, coconut strips, sago, gulaman, pinipig rice, boiled root crops in cubes, fruit slices, flan, and topped with a scoop of ube ice cream.">
+                        <img src="34 Signs You Grew Up Filipino.jpg" alt="Halo-halo" class="card-image food-image-clickable">
+                         <div class="card-content">
+                            <h3 class="menu-name">Halo-halo</h3>
+                            <p class="price">₱40.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Halo-halo to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide" data-id="fil-ado" data-name="Pork Adobo" data-price="50.00" data-img="Comforting Filipino Pork Adobo Recipe.jpg" data-description="A quintessential Filipino dish featuring pork marinated and simmered in vinegar, soy sauce, garlic, bay leaves, and black peppercorns. Rich, savory, and slightly tangy.">
+                        <img src="Comforting Filipino Pork Adobo Recipe.jpg" alt="Adobo" class="card-image food-image-clickable">
+                         <div class="card-content">
+                            <h3 class="menu-name">Pork Adobo</h3>
+                            <p class="price">₱50.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Pork Adobo to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide" data-id="fil-lum" data-name="Lumpia" data-price="10.00" data-img="Lupia.jpg" data-description="Filipino spring rolls filled with ground meat (often pork or beef) and minced vegetables, wrapped in a thin pastry wrapper and deep-fried until golden and crispy.">
+                        <img src="Lupia.jpg" alt="Lumpia" class="card-image food-image-clickable">
+                         <div class="card-content">
+                            <h3 class="menu-name">Lumpia</h3>
+                            <p class="price">₱10.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Lumpia to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide" data-id="fil-sin" data-name="Beef Sinigang" data-price="25.00" data-img="Beef Sinigang (Sinigang na Baka).jpg" data-description="A classic Filipino sour and savory soup. This version uses tender beef chunks simmered in a tamarind broth with various vegetables like radish, water spinach, string beans, and tomatoes.">
+                        <img src="Beef Sinigang (Sinigang na Baka).jpg" alt="Beef Sinigang" class="card-image food-image-clickable">
+                         <div class="card-content">
+                            <h3 class="menu-name">Beef Sinigang</h3>
+                            <p class="price">₱25.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Beef Sinigang to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-button-prev swiper-nav-btn" aria-label="Previous Filipino dish"></div>
+                <div class="swiper-button-next swiper-nav-btn" aria-label="Next Filipino dish"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+
+        <section class="category-section container">
+             <div class="category-header">
+                <h2 class="category-title">Korean Delights</h2>
+                <a href="#" class="see-all-btn">See All <i class='bx bx-chevron-right'></i></a>
+            </div>
+             <div class="swiper category-swiper">
+                <div class="swiper-wrapper">
+                    <div class="card-item swiper-slide" data-id="kor-gim" data-name="Korean Seaweed Rolls" data-price="50.00" data-img="Gimbap (Korean Seaweed Rice Rolls) _ Sift & Simmer.jpg" data-description="Also known as Gimbap, these are Korean rice rolls filled with various ingredients like seasoned vegetables, egg, and sometimes meat, all wrapped in dried seaweed sheets (gim).">
+                        <img src="Gimbap (Korean Seaweed Rice Rolls) _ Sift & Simmer.jpg" alt="Korean Seaweed Rolls" class="card-image food-image-clickable">
+                        <div class="card-content">
+                            <h3 class="menu-name">Korean Seaweed Rolls</h3>
+                            <p class="price">₱50.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Korean Seaweed Rolls to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                     <div class="card-item swiper-slide" data-id="kor-tte" data-name="Tteokbokki" data-price="60.00" data-img="Korean Tteokbokki with Boiled Eggs.jpg" data-description="A popular Korean street food made from chewy rice cakes (tteok) simmered in a spicy, sweet gochujang-based sauce, often with fish cakes, boiled eggs, and scallions.">
+                        <img src="Korean Tteokbokki with Boiled Eggs.jpg" alt="Tteokbokki" class="card-image food-image-clickable">
+                         <div class="card-content">
+                            <h3 class="menu-name">Tteokbokki</h3>
+                            <p class="price">₱60.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Tteokbokki to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                     <div class="card-item swiper-slide" data-id="kor-kka" data-name="Kkae Gangjeong" data-price="30.00" data-img="Kkae Gangjeong (Sesame Crunch).jpg" data-description="A traditional Korean confectionery made by mixing toasted sesame seeds with hot syrup (mulyeot), then pressing it flat and cutting it into squares or bars. Sweet and crunchy.">
+                        <img src="Kkae Gangjeong (Sesame Crunch).jpg" alt="Sesame Crunch" class="card-image food-image-clickable">
+                         <div class="card-content">
+                            <h3 class="menu-name">Kkae Gangjeong</h3>
+                            <p class="price">₱30.00 / pack</p>
+                            <button class="add-to-cart-btn" aria-label="Add Kkae Gangjeong to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide" data-id="kor-dal" data-name="Dalgona Coffee" data-price="60.00" data-img="Dalgona coffee ☕️ aesthetics.jpg" data-description="A viral whipped coffee drink made by whipping instant coffee powder, sugar, and hot water until creamy, then adding it to cold or hot milk.">
+                        <img src="Dalgona coffee ☕️ aesthetics.jpg" alt="Dalgona Coffee" class="card-image food-image-clickable">
+                         <div class="card-content">
+                            <h3 class="menu-name">Dalgona Coffee</h3>
+                            <p class="price">₱60.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Dalgona Coffee to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide" data-id="kor-bul" data-name="Spicy Beef Bulgogi" data-price="50.00" data-img="Spicy Beef Bulgogi (Spicy Bulgogi).jpg" data-description="A fiery take on the classic Korean grilled beef dish. Thinly sliced beef marinated in a spicy gochujang and gochugaru-based sauce before grilling or stir-frying.">
+                        <img src="Spicy Beef Bulgogi (Spicy Bulgogi).jpg" alt="Spicy Bulgogi" class="card-image food-image-clickable">
+                         <div class="card-content">
+                            <h3 class="menu-name">Spicy Beef Bulgogi</h3>
+                            <p class="price">₱50.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Spicy Beef Bulgogi to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-button-prev swiper-nav-btn" aria-label="Previous Korean dish"></div>
+                <div class="swiper-button-next swiper-nav-btn" aria-label="Next Korean dish"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+
+        <section class="category-section container">
+             <div class="category-header">
+                <h2 class="category-title">French Cuisine</h2>
+                 <a href="#" class="see-all-btn">See All <i class='bx bx-chevron-right'></i></a>
+            </div>
+             <div class="swiper category-swiper">
+                <div class="swiper-wrapper">
+                    <div class="card-item swiper-slide" data-id="fre-mil" data-name="Mille-Feuille" data-price="50.00" data-img="Mille-Feuille Recipe - sweettreatsrecipes.jpg" data-description="Meaning 'thousand sheets', this classic French pastry consists of layers of thin puff pastry alternating with pastry cream (crème pâtissière), typically topped with icing or fondant.">
+                        <img src="Mille-Feuille Recipe - sweettreatsrecipes.jpg" alt="Mille-Feuille" class="card-image food-image-clickable">
+                        <div class="card-content">
+                            <h3 class="menu-name">Mille-Feuille</h3>
+                            <p class="price">₱50.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Mille-Feuille to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide" data-id="fre-fri" data-name="Chicken Fricassée" data-price="120.00" data-img="Chicken Fricassée Is About to Become Your New Favorite Sunday Dinner.jpg" data-description="A traditional French stew where chicken pieces are browned, then slowly simmered in a creamy white sauce, often with mushrooms, onions, and herbs.">
+                        <img src="Chicken Fricassée Is About to Become Your New Favorite Sunday Dinner.jpg" alt="Chicken Fricassée" class="card-image food-image-clickable">
+                         <div class="card-content">
+                            <h3 class="menu-name">Chicken Fricassée</h3>
+                            <p class="price">₱120.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Chicken Fricassée to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide" data-id="fre-rat" data-name="Ratatouille" data-price="50.00" data-img="Ratatouille (The EASIEST Recipe You Can Make).jpg" data-description="A Provençal stewed vegetable dish originating from Nice, typically featuring eggplant, zucchini, bell peppers, tomatoes, onions, garlic, and herbs cooked in olive oil.">
+                        <img src="Ratatouille (The EASIEST Recipe You Can Make).jpg" alt="Ratatouille" class="card-image food-image-clickable">
+                         <div class="card-content">
+                            <h3 class="menu-name">Ratatouille</h3>
+                            <p class="price">₱50.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Ratatouille to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide" data-id="fre-mac" data-name="Macarons" data-price="30.00" data-img="Macarons franceses (ingredientes y receta para que salgan perfectos) - PequeRecetas.jpg" data-description="Delicate meringue-based cookies made with almond flour, egg whites, and sugar, sandwiched together with a flavorful filling like ganache, buttercream, or jam.">
+                        <img src="Macarons franceses (ingredientes y receta para que salgan perfectos) - PequeRecetas.jpg" alt="Macarons" class="card-image food-image-clickable">
+                         <div class="card-content">
+                            <h3 class="menu-name">Macarons</h3>
+                            <p class="price">₱30.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Macarons to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide" data-id="fre-chi" data-name="French Chicken Breast" data-price="100.00" data-img="18 Elegant French Chicken Breast Recipes for a Gourmet Dinner.jpg" data-description="An elegant preparation, often pan-seared chicken breast served with a classic French sauce, such as a creamy mushroom sauce (Sauce Forestière) or a white wine reduction.">
+                        <img src="18 Elegant French Chicken Breast Recipes for a Gourmet Dinner.jpg" alt="French Chicken Breast" class="card-image food-image-clickable">
+                         <div class="card-content">
+                            <h3 class="menu-name">French Chicken Breast</h3>
+                            <p class="price">₱100.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add French Chicken Breast to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-button-prev swiper-nav-btn" aria-label="Previous French dish"></div>
+                <div class="swiper-button-next swiper-nav-btn" aria-label="Next French dish"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+
+        <section id="contact-section" class="container contact-section">
+            <h1 class="section-heading">Contact Us</h1>
+            <p class="text-center">Get in touch with Cravory!</p>
+            <div class="contact-form-placeholder" style="height: 100px; background:#eee; display:flex; align-items:center; justify-content:center; border-radius:var(--border-radius-md); margin-top:1rem;">cravory@gmail.com | +63 912 345 6789</div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 Cravory. All Rights Reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="cartModalLabel"><i class='bx bxs-cart me-2'></i>Your Cart</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="cartModalBody">
+                    <p class="text-center text-muted">Your cart is currently empty.</p>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <div class="cart-total" id="cartTotal">Total: ₱0.00</div>
+                    <button type="button" class="btn btn-primary" id="checkoutBtn">Proceed to Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <div class="modal fade" id="addToCartConfirmModal" tabindex="-1" aria-labelledby="addToCartConfirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body" id="addToCartConfirmModalBody">
+                    <div class="text-center">
+                        <i class='bx bx-check-circle bx-lg mb-2' style='color: #198754; font-size: 3rem;'></i>
+                        <p class="mb-1">Item added to cart!</p>
+                        <p class="fw-bold mb-0" id="confirmModalItemName"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="foodDetailModal" tabindex="-1" aria-labelledby="foodDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="foodDetailModalLabel">Food Details</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body row g-3">
+                    <div class="col-md-6">
+                         <img src="" alt="Food image" id="foodDetailImage" class="img-fluid rounded mb-3">
+                    </div>
+                     <div class="col-md-6 d-flex flex-column">
+                        <h3 id="foodDetailName" class="mb-2">Item Name</h3>
+                        <p id="foodDetailDescription" class="text-muted mb-3 flex-grow-1">Item description goes here...</p>
+                        <p class="h4 fw-bold mb-3" id="foodDetailPrice" style="color: var(--primary-color);">Price</p>
+                        <button class="btn btn-primary btn-brand mt-auto" id="foodDetailAddToCartBtn">
+                            <i class='bx bx-cart-add me-2'></i>Add to Cart
+                        </button>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const hamburger = document.querySelector(".hamburger");
+            const navMenu = document.querySelector(".nav-links");
+            if (hamburger && navMenu) {
+                hamburger.addEventListener("click", () => { hamburger.classList.toggle("active"); navMenu.classList.toggle("active"); });
+                document.querySelectorAll(".nav-link").forEach(link => { link.addEventListener("click", () => { if (navMenu.classList.contains("active")) { hamburger.classList.remove("active"); navMenu.classList.remove("active"); } }); });
+                document.addEventListener("click", (e) => { if (!navMenu.contains(e.target) && !hamburger.contains(e.target) && navMenu.classList.contains("active")) { hamburger.classList.remove("active"); navMenu.classList.remove("active"); } });
+            }
+
+            const swiperInstances = [];
+            document.querySelectorAll('.category-swiper').forEach(swiperContainer => {
+                const paginationEl = swiperContainer.querySelector('.swiper-pagination'); const nextEl = swiperContainer.querySelector('.swiper-button-next'); const prevEl = swiperContainer.querySelector('.swiper-button-prev'); if (!paginationEl || !nextEl || !prevEl) { return; }
+                const swiper = new Swiper(swiperContainer, { loop: false, grabCursor: true, spaceBetween: 20, pagination: { el: paginationEl, clickable: true, dynamicBullets: true, }, navigation: { nextEl: nextEl, prevEl: prevEl, }, breakpoints: { 0: { slidesPerView: 1.4, spaceBetween: 15, }, 576: { slidesPerView: 2.2, spaceBetween: 15, }, 768: { slidesPerView: 3, spaceBetween: 20, }, 1024: { slidesPerView: 4, spaceBetween: 20, }, 1200: { slidesPerView: 4.5, spaceBetween: 25, } } });
+                swiperInstances.push(swiper);
+            });
+
+            let cartItems = [];
+            const cartCountElement = document.getElementById('cartCount');
+            const cartIconWrapper = document.getElementById('cartIconWrapper');
+            const cartModalElement = document.getElementById('cartModal');
+            const cartModalBody = document.getElementById('cartModalBody');
+            const cartTotalElement = document.getElementById('cartTotal');
+            const cartModal = new bootstrap.Modal(cartModalElement);
+            const addToCartConfirmModalElement = document.getElementById('addToCartConfirmModal');
+            const addToCartConfirmModal = new bootstrap.Modal(addToCartConfirmModalElement);
+            const confirmModalItemNameElement = document.getElementById('confirmModalItemName');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            const foodDetailModalElement = document.getElementById('foodDetailModal');
+            const foodDetailModal = new bootstrap.Modal(foodDetailModalElement);
+            const foodDetailImage = document.getElementById('foodDetailImage');
+            const foodDetailName = document.getElementById('foodDetailName');
+            const foodDetailDescription = document.getElementById('foodDetailDescription');
+            const foodDetailPrice = document.getElementById('foodDetailPrice');
+            const foodDetailAddToCartBtn = document.getElementById('foodDetailAddToCartBtn');
+            let confirmModalTimeout;
+
+            function updateCartCount() { const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0); cartCountElement.textContent = totalItems; }
+            function showConfirmationModal(itemName) { if (confirmModalTimeout) clearTimeout(confirmModalTimeout); confirmModalItemNameElement.textContent = itemName; addToCartConfirmModal.show(); confirmModalTimeout = setTimeout(() => { addToCartConfirmModal.hide(); }, 1700); }
+            function addToCart(id, name, price, img) { const existingItemIndex = cartItems.findIndex(item => item.id === id); if (existingItemIndex > -1) { cartItems[existingItemIndex].quantity += 1; } else { cartItems.push({ id, name, price: parseFloat(price), quantity: 1, img }); } updateCartCount(); showConfirmationModal(name); console.log("Cart updated:", cartItems); }
+            function increaseQuantity(id) { const itemIndex = cartItems.findIndex(item => item.id === id); if (itemIndex > -1) { cartItems[itemIndex].quantity++; updateCartCount(); renderCart(); } }
+            function decreaseQuantity(id) { const itemIndex = cartItems.findIndex(item => item.id === id); if (itemIndex > -1) { cartItems[itemIndex].quantity--; if (cartItems[itemIndex].quantity <= 0) { removeFromCart(id); } else { updateCartCount(); renderCart(); } } }
+            function removeFromCart(id) { cartItems = cartItems.filter(item => item.id !== id); updateCartCount(); renderCart(); console.log("Cart updated after removal:", cartItems); }
+
+            function renderCart() {
+                cartModalBody.innerHTML = ''; let total = 0;
+                if (cartItems.length === 0) { cartModalBody.innerHTML = '<p class="text-center text-muted my-4">Your cart is currently empty.</p>'; cartTotalElement.textContent = 'Total: ₱0.00'; checkoutBtn.disabled = true; return; }
+                checkoutBtn.disabled = false;
+                cartItems.forEach(item => {
+                    total += item.price * item.quantity;
+                    const itemElement = document.createElement('div'); itemElement.classList.add('cart-item');
+                    itemElement.innerHTML = ` <img src="${item.img || 'assets/images/placeholder_generic.jpg'}" alt="${item.name}" class="cart-item-img"> <div class="cart-item-details"> <div class="cart-item-name">${item.name}</div> <div class="cart-item-price">₱${item.price.toFixed(2)}</div> </div> <div class="cart-item-quantity-controls"> <button class="btn btn-sm btn-outline-secondary cart-quantity-btn decrease-qty-btn" data-id="${item.id}" aria-label="Decrease quantity of ${item.name}">-</button> <span class="cart-item-quantity">${item.quantity}</span> <button class="btn btn-sm btn-outline-secondary cart-quantity-btn increase-qty-btn" data-id="${item.id}" aria-label="Increase quantity of ${item.name}">+</button> </div> <div class="cart-item-actions ms-3"> <button class="btn btn-outline-danger btn-sm remove-item-btn" data-id="${item.id}" title="Remove ${item.name}" aria-label="Remove ${item.name}"> <i class='bx bx-trash'></i> </button> </div> `;
+                    cartModalBody.appendChild(itemElement);
+                });
+                cartTotalElement.textContent = `Total: ₱${total.toFixed(2)}`;
+                cartModalBody.querySelectorAll('.remove-item-btn').forEach(button => { button.addEventListener('click', (e) => removeFromCart(e.currentTarget.dataset.id)); });
+                cartModalBody.querySelectorAll('.increase-qty-btn').forEach(button => { button.addEventListener('click', (e) => increaseQuantity(e.currentTarget.dataset.id)); });
+                cartModalBody.querySelectorAll('.decrease-qty-btn').forEach(button => { button.addEventListener('click', (e) => decreaseQuantity(e.currentTarget.dataset.id)); });
+            }
+
+            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                button.addEventListener('click', (e) => { e.stopPropagation(); const card = button.closest('.card-item'); if (card?.dataset.id && card?.dataset.name && card?.dataset.price) { addToCart(card.dataset.id, card.dataset.name, card.dataset.price, card.dataset.img); } else { console.error("Could not get item details:", card); } });
+            });
+
+            if (cartIconWrapper) { cartIconWrapper.addEventListener('click', () => { renderCart(); }); }
+            if (checkoutBtn) { checkoutBtn.addEventListener('click', () => { if (cartItems.length === 0) { alert("Your cart is empty!"); return; } try { sessionStorage.setItem('cartDataForCheckout', JSON.stringify(cartItems)); window.location.href = 'checkout.html'; } catch (error) { console.error("Could not save cart:", error); alert("An error occurred."); } }); }
+
+            document.querySelectorAll('.food-image-clickable').forEach(img => {
+                 img.addEventListener('click', (e) => {
+                     const card = e.target.closest('.card-item');
+                     if(card?.dataset.id && card?.dataset.name && card?.dataset.price && card?.dataset.img && card?.dataset.description) {
+                         foodDetailImage.src = card.dataset.img;
+                         foodDetailImage.alt = card.dataset.name;
+                         foodDetailName.textContent = card.dataset.name;
+                         foodDetailDescription.textContent = card.dataset.description;
+                         foodDetailPrice.textContent = `₱${parseFloat(card.dataset.price).toFixed(2)}`;
+                         foodDetailAddToCartBtn.onclick = () => { addToCart(card.dataset.id, card.dataset.name, card.dataset.price, card.dataset.img); foodDetailModal.hide(); };
+                         foodDetailModal.show();
+                     } else { console.error("Missing data attributes on card for detail view:", card); }
+                 });
+             });
+
+            const searchInput = document.getElementById('searchInput');
+            const allCards = document.querySelectorAll('.card-item.swiper-slide');
+            const allSections = document.querySelectorAll('.category-section');
+            if (searchInput) {
+                 searchInput.addEventListener('input', (e) => {
+                    const searchTerm = e.target.value.toLowerCase().trim();
+                    let anySectionHasVisibleItems = false;
+                    allSections.forEach(section => {
+                         let sectionHasVisibleItem = false;
+                         const cardsInSection = section.querySelectorAll('.card-item.swiper-slide');
+                         cardsInSection.forEach(card => {
+                             const itemName = card.dataset.name?.toLowerCase() || '';
+                             const isVisible = !searchTerm || itemName.includes(searchTerm);
+                             card.classList.toggle('d-none', !isVisible);
+                             if (isVisible) { sectionHasVisibleItem = true; anySectionHasVisibleItems = true; }
+                         });
+                         const header = section.querySelector('.category-header');
+                         const swiperContainer = section.querySelector('.category-swiper');
+                         if(header) header.style.display = sectionHasVisibleItem ? 'flex' : 'none';
+                         if(swiperContainer) swiperContainer.style.display = sectionHasVisibleItem ? 'block' : 'none';
+                    });
+                    const noResultsMessage = document.getElementById('noResultsMessage');
+                     if (noResultsMessage) { noResultsMessage.style.display = anySectionHasVisibleItems ? 'none' : 'block'; }
+                    swiperInstances.forEach(swiper => { swiper.update(); });
+                 });
+            }
+
+             const sections = document.querySelectorAll('section[id]');
+             const navLiAnchors = document.querySelectorAll('nav .nav-links li a');
+             if (sections.length > 0 && navLiAnchors.length > 0) {
+                 const navHeight = document.querySelector('nav')?.offsetHeight || 70;
+                 window.addEventListener('scroll', () => {
+                   let current = ''; const scrollCheckPosition = window.pageYOffset + navHeight + 100;
+                   sections.forEach((section) => { const sectionTop = section.offsetTop; if (sectionTop <= scrollCheckPosition) { current = section.getAttribute('id') || ''; } });
+                   navLiAnchors.forEach((a) => { a.classList.remove('active'); if (a.getAttribute('href') && a.getAttribute('href').endsWith('#' + current)) { a.classList.add('active'); } });
+                   const homeLink = document.querySelector('nav .nav-links li a[href="#"]');
+                   if (homeLink) { if (window.pageYOffset < 200 && !current) { navLiAnchors.forEach(a => a.classList.remove('active')); homeLink.classList.add('active'); } else if (current !== '' && homeLink.classList.contains('active')) { homeLink.classList.remove('active'); } }
+                 }, { passive: true });
+             }
+
+            console.log("Cravory JS Initialized V4");
+            updateCartCount();
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Cravory</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Poppins', sans-serif; }
+        .summary-item { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #eee; }
+        .summary-item:last-child { border-bottom: none; }
+        .total-row { font-weight: bold; font-size: 1.1rem; border-top: 2px solid #333; margin-top: 1rem; padding-top: 1rem; }
+        .checkout-card { background-color: #fff; border-radius: 0.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-light bg-white shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                 <img src="BearCat.png.jpg" alt="Cravory logo" width="40" height="40" class="d-inline-block align-text-top me-2 rounded-circle">
+                 <span style="color: #d32f2f; font-weight: 700; font-size: 1.4rem;">Cravory Checkout</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="checkout-card p-4 mb-4">
+                    <h2 class="mb-4 border-bottom pb-2">Order Summary</h2>
+                    <div id="checkoutCartSummary">
+                        <p class="text-muted">Loading cart items...</p>
+                    </div>
+                    <div class="summary-item total-row">
+                        <span>Total:</span>
+                        <span id="checkoutTotal">₱0.00</span>
+                    </div>
+                </div>
+
+                <div class="checkout-card p-4 mb-4">
+                    <h2 class="mb-4 border-bottom pb-2">Shipping & Payment</h2>
+                    <p class="text-muted">(Shipping details and payment form would go here)</p>
+                     <div class="mb-3">
+                        <label for="checkoutName" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="checkoutName" placeholder="Juan Dela Cruz" required>
+                    </div>
+                     <div class="mb-3">
+                        <label for="checkoutAddress" class="form-label">Delivery Address</label>
+                        <textarea class="form-control" id="checkoutAddress" rows="3" placeholder="123 Main St, Barangay, City" required></textarea>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button class="btn btn-success btn-lg" id="placeOrderBtn">Place Order</button>
+                    <a href="index.html" class="btn btn-outline-secondary btn-lg ms-2">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="validationErrorModal" tabindex="-1" aria-labelledby="validationErrorModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-warning text-dark">
+            <h1 class="modal-title fs-5" id="validationErrorModalLabel"><i class="bi bi-exclamation-triangle-fill me-2"></i>Validation Error</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="validationErrorModalBody">
+            Please fill in all required fields.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="orderSuccessModal" tabindex="-1" aria-labelledby="orderSuccessModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-success text-white">
+            <h1 class="modal-title fs-5" id="orderSuccessModalLabel"><i class="bi bi-check-circle-fill me-2"></i>Order Placed Successfully</h1>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Thank you for shopping with Cravory! Your order has been placed. You will be redirected shortly.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" id="orderSuccessOkBtn">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const summaryContainer = document.getElementById('checkoutCartSummary');
+            const totalElement = document.getElementById('checkoutTotal');
+            const placeOrderBtn = document.getElementById('placeOrderBtn');
+            const checkoutNameInput = document.getElementById('checkoutName');
+            const checkoutAddressInput = document.getElementById('checkoutAddress');
+            let cartItems = [];
+
+            const validationModalElement = document.getElementById('validationErrorModal');
+            const validationModalBody = document.getElementById('validationErrorModalBody');
+            const validationModal = new bootstrap.Modal(validationModalElement);
+
+            const successModalElement = document.getElementById('orderSuccessModal');
+            const successModalOkBtn = document.getElementById('orderSuccessOkBtn');
+            const successModal = new bootstrap.Modal(successModalElement);
+
+            const cartDataString = sessionStorage.getItem('cartDataForCheckout');
+
+            if (cartDataString) {
+                try {
+                    cartItems = JSON.parse(cartDataString);
+                } catch (error) {
+                    console.error("Error parsing cart data:", error);
+                    summaryContainer.innerHTML = '<p class="text-danger">Error loading cart data.</p>';
+                    return;
+                }
+            }
+
+            if (cartItems.length > 0) {
+                summaryContainer.innerHTML = '';
+                let total = 0;
+                cartItems.forEach(item => {
+                    total += item.price * item.quantity;
+                    const itemDiv = document.createElement('div');
+                    itemDiv.classList.add('summary-item');
+                    itemDiv.innerHTML = `
+                        <span>${item.name} (x${item.quantity})</span>
+                        <span>₱${(item.price * item.quantity).toFixed(2)}</span>
+                    `;
+                    summaryContainer.appendChild(itemDiv);
+                });
+                totalElement.textContent = `₱${total.toFixed(2)}`;
+            } else {
+                summaryContainer.innerHTML = '<p class="text-center text-muted">Your cart is empty.</p>';
+                 if(placeOrderBtn) placeOrderBtn.disabled = true;
+            }
+
+            if (placeOrderBtn) {
+                 placeOrderBtn.addEventListener('click', () => {
+                     const name = checkoutNameInput?.value.trim();
+                     const address = checkoutAddressInput?.value.trim();
+
+                     if (!name || !address) {
+                         validationModalBody.textContent = 'Please fill in your Full Name and Delivery Address.';
+                         validationModal.show();
+                         return;
+                     }
+
+                     console.log('Simulating order placement...');
+
+                     sessionStorage.removeItem('cartDataForCheckout');
+                     successModal.show();
+                 });
+             }
+
+             successModalElement.addEventListener('hidden.bs.modal', () => {
+                 console.log('Redirecting to home page...');
+                 window.location.href = 'index.html';
+             });
+
+             if(successModalOkBtn) {
+                successModalOkBtn.addEventListener('click', () => {
+                    successModal.hide();
+                });
+             }
+
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
