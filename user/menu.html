@@ -83,14 +83,31 @@
 
             <!-- Actions (Language, Cart, Profile) -->
             <div class="nav-actions flex items-center space-x-4 md:space-x-6 order-2 md:order-3">
-                <!-- Language (Example) -->
-                <div class="relative hidden md:block">
-                    <button class="flex items-center text-white hover:text-gray-200">
+                <!-- Language Dropdown -->
+                <div class="relative hidden md:block group">  <!-- Added 'group' class for hover effect -->
+                    <!-- Dropdown Trigger Button -->
+                    <button class="flex items-center text-white hover:text-gray-200 focus:outline-none">
                         <i class="ri-global-line text-xl"></i>
-                        <span class="ml-1 text-sm">EN</span>
-                        <i class="ri-arrow-down-s-line text-lg ml-0.5"></i>
+                        <span class="ml-1 text-sm">EN</span> <!-- Show only current language -->
+                        <i class="ri-arrow-down-s-line text-lg ml-0.5 transition-transform duration-200 group-hover:rotate-180"></i> <!-- Optional: rotate arrow on hover -->
                     </button>
-                    <!-- Dropdown content here -->
+            
+                    <!-- Dropdown Menu -->
+                    <div class="absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg py-1 z-10
+                                hidden group-hover:block  
+                                transition ease-out duration-100 transform opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100"> 
+                                <!-- Initially hidden, shown on group hover -->
+                                <!-- Added some basic transition effects -->
+                        <a href="#" lang="en" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-semibold">English</a> <!-- Added font-semibold for current/selected example -->
+                        <a href="#" lang="fil" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Filipino</a>
+                        <a href="#" lang="ja" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Japanese</a>
+                        <!-- Add other languages as needed -->
+                    </div>
+                </div>
+                <!-- Other nav actions -->
+            </div>
+            
+    
                 </div>
                 <!-- Cart -->
                 <div class="relative">
@@ -607,7 +624,9 @@
                 </div>
             </div>
             <div class="flex flex-col space-y-3">
-                <button class="bg-primary text-white py-3 font-medium rounded-button whitespace-nowrap w-full hover:bg-orange-600 transition duration-200 disabled:opacity-50" id="checkoutButton" disabled>Proceed to Checkout</button>
+                <!-- ***** MODIFIED LINE ***** -->
+                <a href="checkout.html" class="bg-primary text-white py-3 font-medium rounded-button whitespace-nowrap w-full text-center hover:bg-orange-600 transition duration-200" id="checkoutButton">Proceed to Checkout</a>
+                <!-- ***** END MODIFICATION ***** -->
                 <button id="continueShopping" class="border border-gray-300 text-gray-700 py-3 font-medium rounded-button whitespace-nowrap w-full hover:bg-gray-100 transition duration-200">Continue Shopping</button>
             </div>
         </div>
