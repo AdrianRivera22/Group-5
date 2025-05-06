@@ -3,353 +3,795 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cravory</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Cravory - Delicious Food Menu (Combined)</title>
+    <!-- Icon Libraries -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
-    <link rel="stylesheet" href="assets/css/jquery.fancybox.min.css">
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
-    <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <!-- Favicon (Optional but recommended) -->
+    <!-- <link rel="icon" href="assets/images/favicon.png" type="image/png"> -->
 
+    <!-- Embedded CSS -->
+    <style>
+        /* === Google Fonts (Optional but Recommended) === */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        /* === CSS Variables === */
+        :root {
+            --primary-color: #d32f2f; /* Adjusted primary red - choose one that fits your logo */
+            --primary-color-dark: #b71c1c;
+            --secondary-color: #ffc107; /* Example secondary - yellow/gold */
+            --text-dark: #212529; /* Bootstrap dark */
+            --text-light: #6c757d; /* Bootstrap secondary */
+            --body-bg: #f8f9fa; /* Bootstrap light */
+            --card-bg: #ffffff;
+            --white-color: #ffffff;
+            --border-light: #dee2e6; /* Bootstrap border */
+            --shadow-light: rgba(0, 0, 0, 0.06);
+            --shadow-medium: rgba(0, 0, 0, 0.1);
+
+            --header-height: 70px;
+            --border-radius-sm: 0.25rem; /* Bootstrap defaults */
+            --border-radius-md: 0.375rem;
+            --border-radius-lg: 0.5rem;
+            --container-width: 1140px;
+            --container-padding: 15px;
+
+            --font-family: 'Poppins', sans-serif; /* Using Poppins */
+        }
+
+        /* === Base & Resets === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px; /* Base font size */
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--body-bg);
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--primary-color-dark);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            vertical-align: middle; /* Prevent bottom space */
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+            color: inherit; /* Inherit text color */
+        }
+
+        /* === Utility Classes === */
+        .container {
+            max-width: var(--container-width);
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: var(--container-padding);
+            padding-right: var(--container-padding);
+        }
+
+        .section-heading {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem; /* More space below heading */
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* === Navigation === */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            background-color: var(--white-color);
+            box-shadow: 0 2px 10px var(--shadow-light);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .logo-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0; /* Remove default h3 margin */
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem; /* Increased space */
+        }
+
+        .nav-link {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-light);
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; /* Position slightly below */
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        .nav-cta-button {
+            background-color: var(--primary-color);
+            color: var(--white-color) !important; /* Ensure high contrast */
+            padding: 0.6rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-cta-button:hover {
+            background-color: var(--primary-color-dark);
+            color: var(--white-color) !important;
+        }
+        .nav-cta-button::after {
+            display: none;
+        }
+
+        .nav-actions { display: flex; align-items: center; }
+        .hamburger { display: none; cursor: pointer; }
+        .hamburger .bar { display: block; width: 25px; height: 3px; margin: 5px auto; background-color: var(--text-dark); transition: all 0.3s ease-in-out; border-radius: 2px; }
+
+        /* === Main Content === */
+        main {
+            padding-top: calc(var(--header-height) + 1rem); /* Add extra space below nav */
+            padding-bottom: 3rem; /* Space before footer */
+        }
+
+        /* Utility Section (Search/Cart) */
+        .utility-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            /* border-bottom: 1px solid var(--border-light); */ /* Optional border */
+        }
+
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background-color: var(--white-color);
+            border-radius: var(--border-radius-lg);
+            padding: 0.6rem 1.2rem; /* Adjusted padding */
+            box-shadow: 0 2px 8px var(--shadow-light);
+            flex-grow: 1;
+            max-width: 450px;
+            border: 1px solid var(--border-light);
+        }
+
+        .search-box .search-icon {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-right: 0.75rem;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            background: none;
+            font-size: 1rem;
+            width: 100%;
+            color: var(--text-dark);
+        }
+        .search-box input::placeholder {
+            color: #adb5bd; /* Lighter placeholder */
+        }
+
+        .action-icons {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-left: 1.5rem; /* Space from search */
+        }
+
+        .utility-icon {
+            font-size: 1.7rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .utility-icon:hover { color: var(--primary-color); }
+
+        .cart-icon-wrapper { position: relative; }
+        .cart-count { position: absolute; top: -5px; right: -8px; background-color: var(--primary-color); color: var(--white-color); font-size: 0.7rem; font-weight: 600; width: 20px; height: 20px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 1px solid var(--white-color); }
+
+        /* Menu Heading Section */
+        .menu-heading-section { padding-bottom: 1rem; } /* Less space after main heading */
+
+        /* Category Section Styling */
+        .category-section { padding-top: 2rem; padding-bottom: 2.5rem; }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .category-title { font-size: 1.6rem; font-weight: 600; color: var(--text-dark); }
+        .see-all-btn { font-size: 0.95rem; font-weight: 500; color: var(--primary-color); display: inline-flex; align-items: center; gap: 0.2rem; }
+        .see-all-btn i { font-size: 1.2rem; transition: transform 0.2s ease; }
+        .see-all-btn:hover i { transform: translateX(3px); }
+
+
+        /* Swiper Container */
+        .category-swiper { width: 100%; padding-top: 10px; padding-bottom: 50px; } /* More bottom padding */
+
+        /* Card Item Styling */
+        .card-item {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Make cards equal height within swiper */
+        }
+        .card-item:hover { transform: translateY(-6px); box-shadow: 0 10px 20px var(--shadow-medium); }
+
+        .card-image { width: 100%; height: 220px; object-fit: cover; } /* Increased image height */
+
+        .card-content { padding: 1.2rem; flex-grow: 1; display: flex; flex-direction: column; }
+
+        .menu-name { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.6rem; color: var(--text-dark); line-height: 1.3; flex-grow: 1; }
+        .price { font-size: 1.05rem; font-weight: 600; color: var(--primary-color); margin-bottom: 1rem; }
+
+        .add-to-cart-btn {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            border: none;
+            border-radius: var(--border-radius-md);
+            padding: 0.6rem; /* Larger click area */
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            align-self: flex-end;
+            line-height: 1;
+            display: inline-flex; /* Align icon better */
+            align-items: center;
+            justify-content: center;
+        }
+        .add-to-cart-btn:hover { background-color: var(--primary-color-dark); }
+
+        /* Swiper Navigation/Pagination Styling */
+        .swiper-pagination { bottom: 15px !important; }
+        .swiper-pagination-bullet { background-color: var(--text-light); opacity: 0.6; width: 10px; height: 10px; }
+        .swiper-pagination-bullet-active { background-color: var(--primary-color); opacity: 1; }
+
+        .swiper-nav-btn { color: var(--primary-color) !important; background-color: rgba(255, 255, 255, 0.85); border-radius: 50%; width: 44px !important; height: 44px !important; transition: background-color 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .swiper-nav-btn::after { font-size: 1.3rem !important; font-weight: bold; }
+        .swiper-nav-btn:hover { background-color: var(--white-color); }
+        .swiper-button-disabled { opacity: 0.35 !important; cursor: default !important; }
+
+        /* Contact Section Placeholder */
+        .contact-section { padding: 4rem 0; text-align: center; background-color: #e9ecef; margin-top: 3rem; border-top: 1px solid var(--border-light); }
+        .contact-section p { color: var(--text-light); margin-top: 0.5rem; }
+
+        /* === Footer === */
+        .footer { background-color: #343a40; color: #adb5bd; padding: 2rem 0; text-align: center; margin-top: 0; font-size: 0.9rem; }
+        .footer .container { display: flex; flex-direction: column; align-items: center; gap: 0.5rem;}
+        .footer-links a { color: #adb5bd; margin: 0 0.5rem; }
+        .footer-links a:hover { color: var(--white-color); text-decoration: underline;}
+
+        /* === Responsive Design === */
+        @media (max-width: 992px) {
+            .nav-links { gap: 1.5rem; }
+            .container { max-width: 960px; }
+            .category-swiper { padding-bottom: 55px; } /* More space for bullets if dynamic */
+        }
+
+        @media (max-width: 768px) {
+            :root { --header-height: 65px; }
+            .nav-links { position: fixed; left: -100%; top: var(--header-height); flex-direction: column; background-color: var(--white-color); width: 100%; height: calc(100vh - var(--header-height)); text-align: center; transition: left 0.35s ease-in-out; gap: 1.5rem; padding-top: 2rem; box-shadow: 5px 0 15px var(--shadow-light); }
+            .nav-links.active { left: 0; }
+            .nav-link { font-size: 1.1rem; }
+            .nav-cta-button { padding: 0.8rem 2rem; width: 80%; max-width: 250px; margin: 1rem auto; }
+            .hamburger { display: block; z-index: 1001; }
+            .hamburger.active .bar:nth-child(2) { opacity: 0; }
+            .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+            .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+            main { padding-top: calc(var(--header-height) + 0.5rem); }
+            .utility-section { flex-direction: column; gap: 1rem; align-items: stretch; }
+            .search-box { max-width: none; }
+            .action-icons { justify-content: flex-end; margin-left: 0; }
+            .section-heading { font-size: 1.8rem; margin-bottom: 1rem;}
+            .category-title { font-size: 1.4rem; }
+            .swiper-nav-btn { display: none; }
+        }
+
+        @media (max-width: 576px) {
+            html { font-size: 15px; }
+             :root { --header-height: 60px; }
+            .logo-img { width: 40px; height: 40px;}
+            .logo-name { font-size: 1.4rem; }
+            .category-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+            .card-item { border-radius: var(--border-radius-md); }
+            .card-content { padding: 1rem; }
+            .card-image { height: 180px; }
+            .menu-name { font-size: 1rem; }
+            .price { font-size: 0.95rem; }
+            .add-to-cart-btn { font-size: 1.2rem; padding: 0.5rem; }
+            .section-heading { font-size: 1.6rem; }
+            .category-title { font-size: 1.25rem; }
+            .utility-section { padding-top: 0.5rem; margin-bottom: 1.5rem;}
+            .search-box { padding: 0.5rem 1rem;}
+            .action-icons { gap: 1rem;}
+            .utility-icon { font-size: 1.5rem;}
+            .cart-count { width: 18px; height: 18px; font-size: 0.65rem;}
+            .footer { padding: 1.5rem 0;}
+        }
+    </style>
 </head>
 <body>
-        <nav> 
-            <div class="logo">
-              <img src="c:\Users\Admin\Desktop\Webdev project website\landing page\BearCat.png.jpg" 
-                alt="bearcat logo" class="logo-img"><h3>Cravory</h3>
-               
-                
-            </div>
-            <div class="container-nav">
-              <ul class="nav-links">
-                <li><a href="#">Home</a></li>
-                <li><a href="#Categories">Categories</a></li>
-                <li><a href="#Menu">Menu</a></li>
-                <li><a href="#">Contact</a></li>
-                <li><a href="#" class="nav-cta-button">Login</a></li>
-              </ul>
-          
-              <div class="nav-actions">
+    <!-- ==================== Navigation ==================== -->
+    <nav>
+        <div class="nav-container container">
+            <a href="#" class="logo">
+                <img src="BearCat.png.jpg" alt="Cravory logo" class="logo-img">
+                <h3 class="logo-name">Cravory</h3>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link active">Home</a></li>
+                <li><a href="#categories-section" class="nav-link">Categories</a></li>
+                <li><a href="#menu-section" class="nav-link">Menu</a></li>
+                <li><a href="#contact-section" class="nav-link">Contact</a></li>
+                <li><a href="login.html" class="nav-link nav-cta-button">Login</a></li>
+            </ul>
+
+            <div class="nav-actions">
                 <div class="hamburger">
-                  <div class="bar"></div>
-                  <div class="bar"></div>
-                  <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
                 </div>
-              </div>
-
             </div>
-
-</nav>
-           
-
-
-
-<main>
-    <section class="container">
-      <div class="section-menu">
-        <div class="search--box">
-          <i class="uil uil-search"></i>
-          <input type="text" placeholder="Search Here..." />
         </div>
+    </nav>
 
-        <div class="menu--icons">
-          <i class='bx bxs-bowl-rice'></i>
-          <div class="cart-icon">
-            <i class='bx bx-cart-alt'></i>
-            <span>2</span>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <section class="container-1">
-        <h1 class="section-heading">Food Menu</h1>
-        
+    <!-- ==================== Main Content ==================== -->
+    <main>
+        <section class="utility-section container">
+            <div class="search-box">
+                <i class="uil uil-search search-icon"></i>
+                <input type="text" placeholder="Search dishes..." />
+            </div>
+            <div class="action-icons">
+                <div class="cart-icon-wrapper">
+                    <i class='bx bx-cart-alt utility-icon cart-icon'></i>
+                    <span class="cart-count">2</span>
+                </div>
+            </div>
         </section>
 
-    <section class="container-0">
-      <div class="section-menu">
-            <div class="frame"><div class="menu-subheading">Filipino</div></div>
-        <div class="container swiper">
-          <div class="slider-wrapper">
-              <div class="card-list swiper-wrapper">
-                  <div class="card-item swiper-slide">
-                      <img src="Batchoy.jpg" alt="bachoy" class="card-image">
-                      <h2 class="menu-name">Bachoy</h2>
-                      <p class="price">Price: 50.00php</p>
-                      <button class="add-to-cart" >🛒</button>
-  
-                  </div>
-          
-  
-              <div class="card-item swiper-slide">
-                  <img src="Biko Recipe (Filipino Sticky Rice Cake) - Foxy Folksy.jpg" alt="Biko" class="card-image">
-                  <h2 class="menu-name">Biko</h2>
-                  <p class="price">Price: 15.00php</p>
-                  <button class="add-to-cart">🛒</button>
-                  
-              </div>
+        <section class="menu-heading-section container" id="menu-section">
+            <h1 class="section-heading">Discover Our Menu</h1>
+        </section>
 
-              <div class="card-item swiper-slide">
-                <img src="34 Signs You Grew Up Filipino.jpg" alt="halo-halo" class="card-image">
-                <h2 class="menu-name">Halo-halo</h2>
-                <p class="price">Price: 40.00php</p>
-                <button class="add-to-cart">🛒</button>
-                
+        <section class="category-section container" id="categories-section">
+            <div class="category-header">
+                <h2 class="category-title">Filipino Favorites</h2>
+                <a href="#" class="see-all-btn">See All <i class='bx bx-chevron-right'></i></a>
             </div>
-  
-  
-          <div class="card-item swiper-slide">
-              <img src="Comforting Filipino Pork Adobo Recipe.jpg" alt="Adobo" class="card-image">
-              <h2 class="menu-name">Pork Adobo</h2>
-              <p class="price">Price: 50.00php</p>
-              <button class="add-to-cart">🛒</button>
-              
-          </div>
-      
-  
-      <div class="card-item swiper-slide">
-          <img src="Lupia.jpg" alt="lumpia" class="card-image">
-          <h2 class="menu-name">Lumpia</h2>
-          <p class="price">Price: 10.00php</p>
-          <button class="add-to-cart">🛒</button>
-          
-      </div>
-  
-  
-  <div class="card-item swiper-slide">
-      <img src="Pancit Bihon.jpg" alt="pancit" class="card-image">
-      <h2 class="menu-name">Pancit Bihon</h2>
-      <p class="price">Price: 25php</p>
-      <button class="add-to-cart">🛒</button>
-      
-  </div>
-  </div>
-                  <div class="swiper-pagination"></div>
-                  <div class="swiper-button-prev"></div>
-                  <div class="swiper-button-next"></div>
-          </div>
-      </div>
-      
-     
-
-      <div class="see-all-btn">See more...</div>
-      </div>
-        
-      </section>
-
-
-      <section class="container-2">
-        <div class="section-menu">
-          <div class="frame"><div class="menu-subheading">Korean</div></div>
-          
-          <div class="container swiper">
-            <div class="slider-wrapper">
-                <div class="card-list swiper-wrapper">
+            <div class="swiper category-swiper">
+                <div class="swiper-wrapper">
                     <div class="card-item swiper-slide">
-                        <img src="Quick Kimchi Recipe _ A Quick & Easy Recipe for Beginners - Seonkyoung Longest.jpg" alt="kimchi" class="card-image">
-                        <h2 class="menu-name">Kimchi</h2>
-                        <p class="price">Price: 50.00php</p>
-                        <button class="add-to-cart">🛒</button>
-    
+                        <img src="Batchoy.jpg" alt="Batchoy" class="card-image">
+                        <div class="card-content">
+                            <h3 class="menu-name">Batchoy</h3>
+                            <p class="price">₱50.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Batchoy to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
                     </div>
-            
-    
-                <div class="card-item swiper-slide">
-                    <img src="Korean Tteokbokki with Boiled Eggs.jpg" class="card-image">
-                    <h2 class="menu-name">Tteokbokki with Boiled Eggs</h2>
-                    <p class="price">Price: 60.00php</p>
-                    <button class="add-to-cart">🛒</button>
-                    
+                    <div class="card-item swiper-slide">
+                        <img src="Biko Recipe (Filipino Sticky Rice Cake) - Foxy Folksy.jpg" alt="Biko" class="card-image">
+                         <div class="card-content">
+                            <h3 class="menu-name">Biko</h3>
+                            <p class="price">₱15.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Biko to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide">
+                        <img src="34 Signs You Grew Up Filipino.jpg" alt="Halo-halo" class="card-image">
+                         <div class="card-content">
+                            <h3 class="menu-name">Halo-halo</h3>
+                            <p class="price">₱40.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Halo-halo to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide">
+                        <img src="Comforting Filipino Pork Adobo Recipe.jpg" alt="Adobo" class="card-image">
+                         <div class="card-content">
+                            <h3 class="menu-name">Pork Adobo</h3>
+                            <p class="price">₱50.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Pork Adobo to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide">
+                        <img src="Lupia.jpg" alt="Lumpia" class="card-image">
+                         <div class="card-content">
+                            <h3 class="menu-name">Lumpia</h3>
+                            <p class="price">₱10.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Lumpia to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide">
+                        <img src="Beef Sinigang (Sinigang na Baka).jpg" alt="Beef Sinigang" class="card-image">
+                         <div class="card-content">
+                            <h3 class="menu-name">Beef Sinigang</h3>
+                            <p class="price">₱25.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Beef Sinigang to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
                 </div>
-    
-    
-            <div class="card-item swiper-slide">
-                <img src="Kkae Gangjeong (Sesame Crunch).jpg" alt="Gangjeong" class="card-image">
-                <h2 class="menu-name">Kkae Gangjeong (Sesame Crunch)</h2>
-                <p class="price">Price: 30.00php (by pack)</p>
-                <button class="add-to-cart">🛒</button>
-                
+                <div class="swiper-button-prev swiper-nav-btn" aria-label="Previous Filipino dish"></div>
+                <div class="swiper-button-next swiper-nav-btn" aria-label="Next Filipino dish"></div>
+                <div class="swiper-pagination"></div>
             </div>
-        
-    
-        <div class="card-item swiper-slide">
-            <img src="Dalgona coffee ☕️ aesthetics.jpg" alt="dalgona coffee" class="card-image">
-            <h2 class="menu-name">Dalgona Coffee</h2>
-            <p class="price">Price: 60.00php</p>
-            <button class="add-to-cart">🛒</button>
-            
-        </div>
-    
-    
-        <div class="card-item swiper-slide">
-          <img src="c:\Users\Admin\Downloads\Spicy Beef Bulgogi (Spicy Bulgogi).jpg" alt="bulgogi" class="card-image">
-          <h2 class="menu-name">Spicy Beef Bulgogi</h2>
-          <p class="price">Price: 50.00php</p>
-          <button class="add-to-cart">🛒</button>
-          
-      </div>
-    
-    </div>
-                    <div class="swiper-pagination"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-            </div>
-
-            
-        </div>
-        
-       <div class="see-all-btn">See more...</div>
-  
-  
-        </div>
-          
         </section>
-  
 
-        <section class="container-3">
-          <div class="section-menu">
-            <div class="frame"><div class="menu-subheading">French</div></div>
-            
-            <div class="container swiper">
-              <div class="slider-wrapper">
-                  <div class="card-list swiper-wrapper">
-                      <div class="card-item swiper-slide">
-                          <img src="Mille-Feuille Recipe - sweettreatsrecipes.jpg" alt="Mille-Feuille" class="card-image">
-                          <h2 class="menu-name">Mille-Feuille</h2>
-                          <p class="price">Price: 50.00php</p>
-                          <button class="add-to-cart">🛒</button>
-      
-                      </div>
-              
-      
-                  <div class="card-item swiper-slide">
-                      <img src="Chicken Fricassée Is About to Become Your New Favorite Sunday Dinner.jpg" class="card-image">
-                      <h2 class="menu-name">Chicken Fricassée </h2>
-                      <p class="price">Price: 120.00php</p>
-                      <button class="add-to-cart">🛒</button>
-                      
-                  </div>
-      
-      
-              <div class="card-item swiper-slide">
-                  <img src="Ratatouille (The EASIEST Recipe You Can Make).jpg" alt="Ratatouille" class="card-image">
-                  <h2 class="menu-name">Ratatouille</h2>
-                  <p class="price">Price: 50.00php (by pack)</p>
-                  <button class="add-to-cart">🛒</button>
-                  
-              </div>
-          
-      
-          <div class="card-item swiper-slide">
-              <img src="Macarons franceses (ingredientes y receta para que salgan perfectos) - PequeRecetas.jpg" alt="Macarons franceses" class="card-image">
-              <h2 class="menu-name">Macarons Franceses</h2>
-              <p class="price">Price: 30.00php</p>
-              <button class="add-to-cart">🛒</button>
-              
-          </div>
-      
-      
-          <div class="card-item swiper-slide">
-            <img src="18 Elegant French Chicken Breast Recipes for a Gourmet Dinner.jpg" alt="French Chicken Breast" class="card-image">
-            <h2 class="menu-name">French Chicken Breast</h2>
-            <p class="price">Price: 100.00php</p>
-            <button class="add-to-cart">🛒</button>
-            
+        <section class="category-section container">
+             <div class="category-header">
+                <h2 class="category-title">Korean Delights</h2>
+                <a href="#" class="see-all-btn">See All <i class='bx bx-chevron-right'></i></a>
+            </div>
+             <div class="swiper category-swiper">
+                <div class="swiper-wrapper">
+                    <div class="card-item swiper-slide">
+                        <img src="Gimbap (Korean Seaweed Rice Rolls) _ Sift & Simmer.jpg" alt="Korean Seaweed Rolls" class="card-image">
+                        <div class="card-content">
+                            <h3 class="menu-name">Korean Seaweed Rolls</h3>
+                            <p class="price">₱50.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Korean Seaweed Rolls to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                     <div class="card-item swiper-slide">
+                        <img src="Korean Tteokbokki with Boiled Eggs.jpg" alt="Tteokbokki" class="card-image">
+                         <div class="card-content">
+                            <h3 class="menu-name">Tteokbokki</h3>
+                            <p class="price">₱60.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Tteokbokki to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                     <div class="card-item swiper-slide">
+                        <img src="Kkae Gangjeong (Sesame Crunch).jpg" alt="Sesame Crunch" class="card-image">
+                         <div class="card-content">
+                            <h3 class="menu-name">Kkae Gangjeong</h3>
+                            <p class="price">₱30.00 / pack</p>
+                            <button class="add-to-cart-btn" aria-label="Add Kkae Gangjeong to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide">
+                        <img src="Dalgona coffee ☕️ aesthetics.jpg" alt="Dalgona Coffee" class="card-image">
+                         <div class="card-content">
+                            <h3 class="menu-name">Dalgona Coffee</h3>
+                            <p class="price">₱60.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Dalgona Coffee to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide">
+                        <img src="Spicy Beef Bulgogi (Spicy Bulgogi).jpg" alt="Spicy Bulgogi" class="card-image">
+                         <div class="card-content">
+                            <h3 class="menu-name">Spicy Beef Bulgogi</h3>
+                            <p class="price">₱50.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Spicy Beef Bulgogi to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-button-prev swiper-nav-btn" aria-label="Previous Korean dish"></div>
+                <div class="swiper-button-next swiper-nav-btn" aria-label="Next Korean dish"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+
+        <section class="category-section container">
+             <div class="category-header">
+                <h2 class="category-title">French Cuisine</h2>
+                 <a href="#" class="see-all-btn">See All <i class='bx bx-chevron-right'></i></a>
+            </div>
+             <div class="swiper category-swiper">
+                <div class="swiper-wrapper">
+                    <div class="card-item swiper-slide">
+                        <img src="Mille-Feuille Recipe - sweettreatsrecipes.jpg" alt="Mille-Feuille" class="card-image">
+                        <div class="card-content">
+                            <h3 class="menu-name">Mille-Feuille</h3>
+                            <p class="price">₱50.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Mille-Feuille to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide">
+                        <img src="Chicken Fricassée Is About to Become Your New Favorite Sunday Dinner.jpg" alt="Chicken Fricassée" class="card-image">
+                         <div class="card-content">
+                            <h3 class="menu-name">Chicken Fricassée</h3>
+                            <p class="price">₱120.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Chicken Fricassée to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide">
+                        <img src="Ratatouille (The EASIEST Recipe You Can Make).jpg" alt="Ratatouille" class="card-image">
+                         <div class="card-content">
+                            <h3 class="menu-name">Ratatouille</h3>
+                            <p class="price">₱50.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Ratatouille to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide">
+                        <img src="Macarons franceses (ingredientes y receta para que salgan perfectos) - PequeRecetas.jpg" alt="Macarons" class="card-image">
+                         <div class="card-content">
+                            <h3 class="menu-name">Macarons</h3>
+                            <p class="price">₱30.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add Macarons to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                    <div class="card-item swiper-slide">
+                        <img src="18 Elegant French Chicken Breast Recipes for a Gourmet Dinner.jpg" alt="French Chicken Breast" class="card-image">
+                         <div class="card-content">
+                            <h3 class="menu-name">French Chicken Breast</h3>
+                            <p class="price">₱100.00</p>
+                            <button class="add-to-cart-btn" aria-label="Add French Chicken Breast to cart"><i class='bx bx-cart-add'></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-button-prev swiper-nav-btn" aria-label="Previous French dish"></div>
+                <div class="swiper-button-next swiper-nav-btn" aria-label="Next French dish"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+
+        <section id="contact-section" class="container contact-section">
+            <h1 class="section-heading">Contact Us</h1>
+            <p class="text-center">Get in touch with Cravory!</p>
+            <div class="contact-form-placeholder" style="height: 200px; background:#eee; display:flex; align-items:center; justify-content:center; border-radius:var(--border-radius-md); margin-top:1rem;">cravory@gmail.com
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== Footer ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 Cravory. All Rights Reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+            </div>
         </div>
-      
-      </div>
-                      <div class="swiper-pagination"></div>
-                      <div class="swiper-button-prev"></div>
-                      <div class="swiper-button-next"></div>
-              </div>
-  
-              
-          </div>
-          
-         <div class="see-all-btn">See more...</div>
-    
-    
-          </div>
-            
-          </section>
+    </footer>
 
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
+    <!-- Embedded JavaScript -->
+    <script>
+        // --- Hamburger Menu Toggle ---
+        const hamburger = document.querySelector(".hamburger");
+        const navMenu = document.querySelector(".nav-links");
 
+        if (hamburger && navMenu) {
+            hamburger.addEventListener("click", () => {
+                hamburger.classList.toggle("active");
+                navMenu.classList.toggle("active");
+            });
 
-
-
-
-
-
-
-      
-          <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-
-          <script>
-      const swiper = new Swiper('.slider-wrapper', {
-                  loop: true,
-                  grabCursor: true,
-                  spaceBetween: true,
-      
-      
-                  pagination: {
-                    el: '.swiper-pagination',
-                      clickable: true,
-                      dynamicBullets: true,
-                  },
-      
-                  // Navigation arrows
-                  navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                  },
-      
-                  breakpoints: {
-                      0: {
-                          slidesPerView: 1,
-                          spaceBetween: 20,
-                      },
-                      620: {
-                          slidesPerView: 2,
-                          spaceBetween: 20,
-                      },
-                      1024: {
-                          slidesPerView: 3,
-                          spaceBetween: 20,
-                      },
-                  }
-              }); </script>
-      
-
- <script>
-                const hamburger = document.querySelector(".hamburger");
-                const navMenu = document.querySelector("nav ul");
-                
-            
-                hamburger.addEventListener("click", () => {
-                    navMenu.classList.toggle("active");
-                });
-            
-                userIcon.addEventListener("click", () => {
-                    userMenu.classList.toggle("show");
-                });
-            
-                
-                document.addEventListener("click", (e) => {
-                    if (!userMenu.contains(e.target) && e.target !== userIcon) {
-                        userMenu.classList.remove("show");
+            document.querySelectorAll(".nav-link").forEach(link => {
+                link.addEventListener("click", () => {
+                    if (navMenu.classList.contains("active")) {
+                        hamburger.classList.remove("active");
+                        navMenu.classList.remove("active");
                     }
                 });
-            </script>
+            });
 
-            
-            <script src="main.js"></script>
- 
-</main>
+             document.addEventListener("click", (e) => {
+                if (!navMenu.contains(e.target) && !hamburger.contains(e.target) && navMenu.classList.contains("active")) {
+                    hamburger.classList.remove("active");
+                    navMenu.classList.remove("active");
+                }
+            });
+
+        } else {
+            console.error("Hamburger menu or navigation links not found.");
+        }
+
+
+        // --- Swiper Initialization ---
+        const categorySwipers = document.querySelectorAll('.category-swiper');
+
+        categorySwipers.forEach(swiperContainer => {
+            const paginationEl = swiperContainer.querySelector('.swiper-pagination');
+            const nextEl = swiperContainer.querySelector('.swiper-button-next');
+            const prevEl = swiperContainer.querySelector('.swiper-button-prev');
+
+            if (!paginationEl || !nextEl || !prevEl) {
+                console.warn("Swiper container missing required elements (pagination/navigation):", swiperContainer);
+                return;
+            }
+
+            new Swiper(swiperContainer, {
+                loop: false,
+                grabCursor: true,
+                spaceBetween: 20,
+
+                pagination: {
+                  el: paginationEl,
+                  clickable: true,
+                  dynamicBullets: true,
+                },
+
+                navigation: {
+                  nextEl: nextEl,
+                  prevEl: prevEl,
+                },
+
+                breakpoints: {
+                    0: {
+                        slidesPerView: 1.4,
+                        spaceBetween: 15,
+                    },
+                    576: {
+                        slidesPerView: 2.2,
+                        spaceBetween: 15,
+                    },
+                     768: {
+                        slidesPerView: 3,
+                        spaceBetween: 20,
+                    },
+                    1024: {
+                        slidesPerView: 4,
+                        spaceBetween: 20,
+                    },
+                    1200: {
+                        slidesPerView: 4.5,
+                        spaceBetween: 25,
+                    },
+                }
+            });
+        });
+
+        // --- Add to Cart Logic (Placeholder) ---
+        document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const card = button.closest('.card-item');
+                const itemName = card ? card.querySelector('.menu-name')?.textContent : 'Unknown Item';
+                console.log(`Add to cart clicked for: ${itemName}`);
+                alert(`${itemName} added to cart (placeholder)!`);
+                const cartCountElement = document.querySelector('.cart-count');
+                if (cartCountElement) {
+                    let currentCount = parseInt(cartCountElement.textContent) || 0;
+                    cartCountElement.textContent = currentCount + 1;
+                    const cartIcon = document.querySelector('.cart-icon');
+                     if(cartIcon) {
+                        // Simple visual feedback (optional)
+                        cartIcon.style.transform = 'scale(1.2)';
+                        setTimeout(() => {cartIcon.style.transform = 'scale(1)';}, 150);
+                     }
+                }
+            });
+        });
+
+        // --- Active Nav Link Highlighting on Scroll (Optional) ---
+        const sections = document.querySelectorAll('section[id]');
+        const navLiAnchors = document.querySelectorAll('nav .nav-links li a'); // Select the anchor tags
+
+        window.addEventListener('scroll', () => {
+          let current = '';
+          const scrollPosition = pageYOffset + (window.innerHeight / 2); // Consider middle of viewport
+
+          sections.forEach((section) => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+              current = section.getAttribute('id');
+            }
+          });
+
+          navLiAnchors.forEach((a) => {
+            a.classList.remove('active');
+            // Check if the link's href attribute ends with the current section ID
+            if (a.getAttribute('href') && a.getAttribute('href').endsWith('#' + current)) {
+              a.classList.add('active');
+            }
+          });
+
+          // Handle 'Home' link explicitly if near the top or no section matches
+          const homeLink = document.querySelector('nav .nav-links li a[href="#"]');
+          if (homeLink) {
+                if (window.pageYOffset < 200 && !current) { // If near top and no section active
+                    navLiAnchors.forEach(a => a.classList.remove('active')); // Remove active from others
+                    homeLink.classList.add('active'); // Activate home
+                } else if (current === '' && window.pageYOffset >= 200) {
+                     homeLink.classList.remove('active'); // Deactivate home if scrolled down and not in a section
+                }
+          }
+        });
+
+        console.log("Cravory JS Initialized");
+    </script>
+
 </body>
-       
-        
 </html>
