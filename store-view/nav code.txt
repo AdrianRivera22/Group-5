@@ -1,0 +1,18 @@
+<nav>
+        <div class="logo">
+            <img src="img/bear-cat-logo.png" alt="bear-cat-logo" class="logo-img">
+            <h3>Cravory</h3>
+        </div>
+        <div class="hamburger">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#Categories">Categories</a></li>
+            <li><a href="#Menu">Menu</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a class="nav-cta-button" href="#">Login</a></li>
+        </ul>
+    </nav>

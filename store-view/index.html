@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cravory - Authentic Filipino Food</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="nav.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="img/bear-cat-logo.png" alt="bear-cat-logo" class="logo-img">
+            <h3>Cravory</h3>
+        </div>
+        <div class="hamburger">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#Categories">Categories</a></li>
+            <li><a href="#Menu">Menu</a></li>
+            <li><a href="#Location">Location</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a class="nav-cta-button" href="#">Login</a></li>
+            </ul>
+    </nav>
+    <div class="container">
+
+        <section class="text-center mt-5 mb-4">
+            <h1 class="display-4">Example Store Name</h1>
+            <p class="lead">Store Motto</p>
+            <button id="favoriteButton" class="btn btn-link favorite-btn p-0 border-0" title="Add to Favorites">
+                <i class="bi bi-heart"></i>      <i class="bi bi-heart-fill"></i> </button>
+            <small id="favoriteStatus" class="d-block text-muted"></small>
+        </section>
+
+        <section id="Categories" class="section-padding bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5">Popular Categories</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card text-center h-100">
+                            <img src="img/main_dish.jpg" class="card-img-top category-img" alt="Main Dishes">
+                            <div class="card-body">
+                                <h5 class="card-title">Ulam (Main Dishes)</h5>
+                                <p class="card-text">Hearty and savory dishes perfect with rice.</p>
+                                <a href="#Menu" class="btn btn-danger">View Menu</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center h-100">
+                            <img src="img/merienda.jpg" class="card-img-top category-img" alt="Snacks">
+                            <div class="card-body">
+                                <h5 class="card-title">Merienda (Snacks)</h5>
+                                <p class="card-text">Delicious bites for any time of the day.</p>
+                                <a href="#Menu" class="btn btn-danger">View Menu</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                         <div class="card text-center h-100">
+                            <img src="img/deserts.jpg" class="card-img-top category-img" alt="Desserts">
+                            <div class="card-body">
+                                <h5 class="card-title">Panghimagas (Desserts)</h5>
+                                <p class="card-text">Sweet treats to complete your meal.</p>
+                                <a href="#Menu" class="btn btn-danger">View Menu</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="Deals" class="section-padding">
+            <div class="container">
+                <h2 class="text-center mb-5">Special Offers & Deals</h2>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="alert alert-success" role="alert">
+                            <h4 class="alert-heading">Family Bundle!</h4>
+                            <p>Get Adobo, Sinigang, Rice Platter, and 4 Lumpia for only ₱999! Save ₱150.</p>
+                            <hr>
+                            <p class="mb-0">Valid until end of May 2025.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-info" role="alert">
+                            <h4 class="alert-heading">Free Halo-Halo!</h4>
+                            <p>Enjoy a free Special Halo-Halo for every single receipt purchase worth ₱750.</p>
+                             <hr>
+                            <p class="mb-0">Dine-in only. Promo runs weekdays.</p>
+                        </div>
+                    </div>
+                     <div class="col-md-12">
+                        <div class="alert alert-warning" role="alert">
+                            <h4 class="alert-heading">Merienda Madness!</h4>
+                            <p>10% OFF on all Pancit dishes and Kakanin from 2 PM to 5 PM daily.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="Menu" class="section-padding bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5">Our Menu</h2>
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100">
+                            <img src="img/chicken_adobo.jpg" class="card-img-top menu-item-img" alt="Chicken Adobo">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">Chicken Adobo</h5>
+                                <p class="card-text flex-grow-1">Classic Filipino dish with chicken simmered in soy sauce, vinegar, garlic, and spices.</p>
+                                <p class="card-text fw-bold">Price: ₱180</p>
+                                <a href="#" class="btn btn-danger mt-auto">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100">
+                            <img src="img/pork_sinigang.jpg" class="card-img-top menu-item-img" alt="Pork Sinigang">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">Pork Sinigang</h5>
+                                <p class="card-text flex-grow-1">Savory and sour tamarind-based soup with pork ribs and assorted vegetables.</p>
+                                <p class="card-text fw-bold">Price: ₱220</p>
+                                <a href="#" class="btn btn-danger mt-auto">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100">
+                            <img src="img/lechon_kawali.jpg" class="card-img-top menu-item-img" alt="Lechon Kawali">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">Lechon Kawali</h5>
+                                <p class="card-text flex-grow-1">Crispy deep-fried pork belly served with liver sauce.</p>
+                                <p class="card-text fw-bold">Price: ₱250</p>
+                                <a href="#" class="btn btn-danger mt-auto">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100">
+                            <img src="img/pancit_bihon.jpg" class="card-img-top menu-item-img" alt="Pancit Bihon">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">Pancit Bihon</h5>
+                                <p class="card-text flex-grow-1">Stir-fried rice noodles with vegetables, chicken, and shrimp.</p>
+                                <p class="card-text fw-bold">Price: ₱150</p>
+                                <a href="#" class="btn btn-danger mt-auto">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-lg-4 col-md-6">
+                        <div class="card h-100">
+                            <img src="img/halo_halo.jpg" class="card-img-top menu-item-img" alt="Halo-Halo Special">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">Halo-Halo Special</h5>
+                                <p class="card-text flex-grow-1">Popular Filipino shaved ice dessert with sweet beans, fruits, leche flan, ube ice cream, and milk.</p>
+                                <p class="card-text fw-bold">Price: ₱120</p>
+                                <a href="#" class="btn btn-danger mt-auto">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-lg-4 col-md-6">
+                        <div class="card h-100">
+                            <img src="img/lumpiang_shanghai.jpg" class="card-img-top menu-item-img" alt="Lumpia Shanghai">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">Lumpia Shanghai (6 pcs)</h5>
+                                <p class="card-text flex-grow-1">Crispy fried spring rolls filled with ground pork and vegetables.</p>
+                                <p class="card-text fw-bold">Price: ₱100</p>
+                                <a href="#" class="btn btn-danger mt-auto">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+        </section>
+
+        <section id="Reviews" class="section-padding">
+            <div class="container">
+                 <h2 class="text-center mb-5">Reviews & Ratings</h2>
+                 <div class="text-center mb-4">
+                     <h4>Overall Rating: 4.5 / 5</h4>
+                     <div class="rating-stars">
+                         <i class="bi bi-star-fill"></i>
+                         <i class="bi bi-star-fill"></i>
+                         <i class="bi bi-star-fill"></i>
+                         <i class="bi bi-star-fill"></i>
+                         <i class="bi bi-star-half"></i>
+                     </div>
+                     <small class="text-muted">(Based on 125 reviews)</small>
+                 </div>
+
+                 <div class="row justify-content-center">
+                     <div class="col-md-8">
+                         <div class="list-group">
+                             <div class="list-group-item list-group-item-action flex-column align-items-start mb-3 shadow-sm">
+                                 <div class="d-flex w-100 justify-content-between">
+                                     <h5 class="mb-1">Maria D.</h5>
+                                     <small>3 days ago</small>
+                                 </div>
+                                 <div class="rating-stars mb-1">
+                                     <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                                 </div>
+                                 <p class="mb-1">Authentic taste! The Adobo reminds me of my Lola's cooking. Will definitely come back!</p>
+                             </div>
+                             <div class="list-group-item list-group-item-action flex-column align-items-start mb-3 shadow-sm">
+                                 <div class="d-flex w-100 justify-content-between">
+                                     <h5 class="mb-1">John L.</h5>
+                                     <small>1 week ago</small>
+                                 </div>
+                                 <div class="rating-stars mb-1">
+                                     <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star"></i>
+                                 </div>
+                                 <p class="mb-1">Good food and generous portions. The Lechon Kawali was super crispy. Service was a bit slow during peak hours though.</p>
+                             </div>
+                              <div class="list-group-item list-group-item-action flex-column align-items-start mb-3 shadow-sm">
+                                 <div class="d-flex w-100 justify-content-between">
+                                     <h5 class="mb-1">Anna K.</h5>
+                                     <small>2 weeks ago</small>
+                                 </div>
+                                 <div class="rating-stars mb-1">
+                                     <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                                 </div>
+                                 <p class="mb-1">Loved the Halo-Halo! Perfect for the hot weather. Nice ambiance too.</p>
+                             </div>
+                             </div>
+                     </div>
+                 </div>
+            </div>
+        </section>
+
+        <section id="Location" class="section-padding bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5">Visit Us</h2>
+                <div class="row">
+                    <div class="col-md-6 mb-4 mb-md-0">
+                        <h4>Our Location</h4>
+                        <address>
+                            <strong>Cravory Filipino Food</strong><br>
+                            123 Rizal Street, Barangay Carmen<br>
+                            Cagayan de Oro City, 9000<br>
+                            Northern Mindanao, Philippines
+                        </address>
+                        <p><i class="bi bi-telephone-fill"></i> Phone: +63 (88) 123-4567</p>
+                        <p><i class="bi bi-clock-fill"></i> Hours: Mon - Sun, 10:00 AM - 9:00 PM</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Find Us on the Map</h4>
+                        <div id="map-container">
+                           <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63140.63210895986!2d124.6017431780702!3d8.47485333866341!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32fff2d91dd1cf11%3A0x4455767481711a79!2sCagayan%20de%20Oro%2C%20Misamis%20Oriental!5e0!3m2!1sen!2sph!4v1714975000000!5m2!1sen!2sph"
+                                style="border:0;"
+                                allowfullscreen=""
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div><footer class="bg-dark text-white text-center p-3 mt-5">
+        <p>&copy; 2025 Cravory Filipino Food. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                 if (hamburger.classList.contains('active')) {
+                     hamburger.classList.remove('active');
+                     navLinks.classList.remove('active');
+                 }
+            });
+        });
+
+        const favoriteButton = document.getElementById('favoriteButton');
+        const favoriteStatus = document.getElementById('favoriteStatus');
+        let isFavorite = false;
+
+        function updateFavoriteButton() {
+            if (isFavorite) {
+                favoriteButton.classList.add('active');
+                favoriteButton.title = "Remove from Favorites";
+                favoriteStatus.textContent = "Added to your favorites!";
+            } else {
+                favoriteButton.classList.remove('active');
+                favoriteButton.title = "Add to Favorites";
+                favoriteStatus.textContent = "";
+            }
+        }
+
+        favoriteButton.addEventListener('click', () => {
+            isFavorite = !isFavorite;
+            updateFavoriteButton();
+            console.log("Favorite status:", isFavorite);
+        });
+
+        updateFavoriteButton();
+
+    </script>
+
+</body>
+</html>
