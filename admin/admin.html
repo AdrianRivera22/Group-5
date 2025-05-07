@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Admin Dashboard - Cravory</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <style>
+        :root { --sidebar-width: 240px; }
+        body { display: flex; min-height: 100vh; background-color: #f8f9fa; }
+        aside {
+            width: var(--sidebar-width); background-color: #212529; color: #dee2e6;
+            padding: 1.5rem 1rem; display: flex; flex-direction: column;
+            flex-shrink: 0; position: fixed; top: 0; bottom: 0; left: 0; z-index: 1030;
+            overflow-y: auto;
+        }
+        aside .dashboard-title { font-size: 1.5em; margin-bottom: 2rem; text-align: center; color: #fff; font-weight: 600; }
+        aside .nav-link {
+            padding: 0.75rem 1rem; color: #adb5bd; border-radius: 0.375rem;
+            margin-bottom: 0.25rem; transition: background-color 0.2s ease, color 0.2s ease; cursor: pointer;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
+        }
+        aside .nav-link i { margin-right: 0.75rem; width: 1.2em; text-align: center; }
+        aside .nav-link:hover, aside .nav-link.active { background-color: #495057; color: #fff; }
+        aside nav { flex-grow: 1; }
+        main { flex-grow: 1; padding: 2rem; margin-left: var(--sidebar-width); position: relative; }
+        .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #dee2e6; }
+        .main-header h1 { margin-bottom: 0; color: #343a40; font-size: 1.8rem; }
+        .content-panel { display: none; animation: fadeIn 0.5s ease-in-out; }
+        .content-panel.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .section-card .card-header {
+             background-color: #f8f9fa; border-bottom: 1px solid #dee2e6; font-weight: 600; font-size: 1.1rem;
+             display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.25rem;
+         }
+         .section-card .card-header i { margin-right: 0.5rem; }
+         .section-card .card-header .btn, .section-card .card-header .view-all-link { font-size: 0.85rem; padding: 0.3rem 0.7rem; }
+         .view-all-link { text-decoration: none; }
+        .stat-card .card-body { text-align: center; }
+        .stat-card .card-title { font-size: 0.9rem; color: #6c757d; margin-bottom: 0.5rem; font-weight: 500; text-transform: uppercase; }
+        .stat-card .stat-number { font-size: 2rem; font-weight: 700; color: #343a40; }
+        .form-panel .card-body { padding: 1.5rem; }
+        .form-panel .card-header { font-size: 1.2rem; }
+        .form-panel label { margin-bottom: 0.5rem; font-weight: 500; }
+        .form-actions { margin-top: 1.5rem; display: flex; gap: 0.5rem; justify-content: flex-end; }
+        .table th { font-weight: 600; background-color: #e9ecef; white-space: nowrap; }
+        .table td, .table th { vertical-align: middle; }
+        .action-buttons .btn { margin-right: 5px; padding: 0.25rem 0.5rem; font-size: 0.8rem; }
+        .action-buttons .btn:last-child { margin-right: 0; }
+        .action-buttons .btn i { margin-right: 0; }
+        .form-control.is-invalid { border-color: #dc3545; }
+        .invalid-feedback { display: none; width: 100%; margin-top: 0.25rem; font-size: .875em; color: #dc3545; }
+        .form-control.is-invalid ~ .invalid-feedback { display: block; }
+        .chart-container {
+            position: relative; margin-bottom: 2rem; padding: 1.25rem;
+            background-color: #fff; border-radius: 0.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); height: 100%; 
+        }
+         .chart-wrapper { height: 280px; position: relative; }
+         .chart-container h5 { margin-bottom: 1rem; text-align: center; font-weight: 600; color: #495057; }
+         .table img.food-thumb { width: 45px; height: 45px; object-fit: cover; border-radius: 0.25rem; margin-right: 10px;}
+         #recent-orders-table td, #recent-orders-table th { font-size: 0.9rem; padding: 0.6rem 0.75rem;} 
+    </style>
+</head>
+<body>
+    <aside>
+        <div class="dashboard-title"><i class="fas fa-shield-alt"></i> Admin Panel</div>
+        <nav class="nav flex-column">
+            <a class="nav-link active" data-target="dashboard-overview-panel"><i class="fas fa-tachometer-alt"></i> Overview</a>
+            <a class="nav-link" data-target="stores-list-panel"><i class="fas fa-store"></i> Stores</a>
+            <a class="nav-link" data-target="food-list-panel"><i class="fas fa-utensils"></i> Food Items</a>
+            <a class="nav-link" data-target="orders-list-panel"><i class="fas fa-receipt"></i> Orders</a>
+            <a class="nav-link" data-target="users-list-panel"><i class="fas fa-users"></i> Users</a>
+        </nav>
+    </aside>
+
+    <main>
+        <div class="main-header">
+             <h1 id="main-heading">Welcome Admin!</h1>
+             <a href="../login-page/login.html" class="btn btn-outline-danger logout-button">
+                 <i class="fas fa-sign-out-alt"></i> Logout
+             </a>
+        </div>
+
+        <div id="dashboard-overview-panel" class="content-panel active">
+            <h2>Dashboard Overview</h2>
+            <!-- Stats Row -->
+             <div class="row mb-4 g-3">
+                 <div class="col-sm-6 col-xl-3">
+                     <div class="card stat-card h-100 shadow-sm border-start border-primary border-4">
+                        <div class="card-body"> <h5 class="card-title">Total Orders</h5> <p class="stat-number" id="total-orders">0</p> </div>
+                    </div>
+                 </div>
+                 <div class="col-sm-6 col-xl-3">
+                    <div class="card stat-card h-100 shadow-sm border-start border-warning border-4">
+                        <div class="card-body"> <h5 class="card-title">Pending Orders</h5> <p class="stat-number" id="pending-orders">0</p> </div>
+                    </div>
+                 </div>
+                 <div class="col-sm-6 col-xl-3">
+                    <div class="card stat-card h-100 shadow-sm border-start border-info border-4">
+                        <div class="card-body"> <h5 class="card-title">Total Stores</h5> <p class="stat-number" id="total-stores">0</p> </div>
+                     </div>
+                 </div>
+                 <div class="col-sm-6 col-xl-3">
+                    <div class="card stat-card h-100 shadow-sm border-start border-success border-4">
+                        <div class="card-body"> <h5 class="card-title">Total Revenue</h5> <p class="stat-number" id="total-revenue">₱0.00</p> </div>
+                    </div>
+                 </div>
+             </div>
+
+             
+             <div class="row g-4">
+                
+                <div class="col-xl-8">
+                     <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div class="chart-container">
+                                <h5>Order Status Distribution</h5>
+                                <div class="chart-wrapper">
+                                    <canvas id="orderStatusChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="col-lg-6">
+                            <div class="chart-container">
+                                <h5>Food Items Per Store</h5>
+                                 <div class="chart-wrapper">
+                                    <canvas id="foodItemsPerStoreChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                 </div>
+
+                
+                 <div class="col-xl-4">
+                    <div class="card section-card shadow-sm h-100">
+                        <div class="card-header">
+                            <span><i class="fas fa-history"></i> Recent Orders</span>
+                            <a href="#" class="view-all-link" data-target="orders-list-panel">View All</a>
+                        </div>
+                        <div class="card-body p-0">
+                             <div class="table-responsive">
+                                <table class="table table-hover mb-0" id="recent-orders-table">
+                                     <thead><tr><th>ID</th><th>Customer</th><th>Total</th><th>Status</th></tr></thead>
+                                     <tbody id="recent-orders-table-body">
+                                         <tr><td colspan="4" class="text-center text-muted py-3">Loading...</td></tr>
+                                     </tbody>
+                                 </table>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+             </div>
+
+             <div class="row mt-4 g-4">
+                 <div class="col-md-6">
+                     <div class="card stat-card h-100 shadow-sm">
+                         <div class="card-body"> <h5 class="card-title">Total Food Items</h5> <p class="stat-number" id="total-food-items">0</p> </div>
+                    </div>
+                 </div>
+                  <div class="col-md-6">
+                     <div class="card stat-card h-100 shadow-sm">
+                         <div class="card-body"> <h5 class="card-title">Total Users</h5> <p class="stat-number" id="total-users">0</p> </div>
+                     </div>
+                  </div>
+             </div>
+        </div>
+
+        <div id="stores-list-panel" class="content-panel">
+            <div class="card section-card shadow-sm">
+                <div class="card-header">
+                    <span><i class="fas fa-store"></i> Manage Stores</span>
+                    <button class="btn btn-primary btn-sm add-btn" data-form-target="store-form-panel" data-list-target="stores-list-panel">
+                        <i class="fas fa-plus"></i> Add New Store
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                         <table class="table table-striped table-hover table-bordered">
+                            <thead> <tr> <th>Store ID</th> <th>Name</th><th>Item Count</th><th>Actions</th> </tr> </thead>
+                            <tbody id="stores-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="store-form-panel" class="content-panel">
+             <div class="card section-card form-panel shadow-sm">
+                <div class="card-header" id="store-form-header">Add New Store</div>
+                <div class="card-body">
+                     <form id="store-form" novalidate>
+                        <input type="hidden" id="store-edit-id">
+                        <input type="hidden" id="store-action-mode">
+
+                        <div class="mb-3">
+                            <label for="store-name" class="form-label">Store Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="store-name" required>
+                            <div class="invalid-feedback">Store name is required.</div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary cancel-btn" data-target="stores-list-panel">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Store</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="food-list-panel" class="content-panel">
+             <div class="card section-card shadow-sm">
+                 <div class="card-header">
+                     <span><i class="fas fa-utensils"></i> Manage Food Items</span>
+                     <button class="btn btn-primary btn-sm add-btn" data-form-target="food-form-panel" data-list-target="food-list-panel">
+                         <i class="fas fa-plus"></i> Add New Food
+                     </button>
+                 </div>
+                 <div class="card-body">
+                     <div class="table-responsive">
+                        <table class="table table-striped table-hover table-bordered">
+                             <thead><tr><th>Image</th><th>Food Name</th><th>Store Name</th><th>Price</th><th>Rating</th><th>Category</th><th>Actions</th></tr></thead>
+                             <tbody id="food-table-body"></tbody>
+                         </table>
+                    </div>
+                 </div>
+             </div>
+        </div>
+
+        <div id="food-form-panel" class="content-panel">
+            <div class="card section-card form-panel shadow-sm">
+                <div class="card-header" id="food-form-header">Add New Food Item</div>
+                <div class="card-body">
+                    <form id="food-form" novalidate>
+                        <input type="hidden" id="food-edit-id">
+                        <input type="hidden" id="food-action-mode">
+
+                        <div class="mb-3">
+                             <label for="food-store-id" class="form-label">Associated Store <span class="text-danger">*</span></label>
+                             <select class="form-select" id="food-store-id" required>
+                                 <option value="">Loading stores...</option>
+                             </select>
+                             <div class="invalid-feedback">Please select a store.</div>
+                         </div>
+                         <div class="mb-3">
+                            <label for="food-name" class="form-label">Food Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="food-name" required>
+                            <div class="invalid-feedback">Food name is required.</div>
+                        </div>
+                         <div class="mb-3">
+                            <label for="food-price" class="form-label">Price (₱) <span class="text-danger">*</span></label>
+                            <input type="number" step="0.01" min="0" class="form-control" id="food-price" required placeholder="e.g., 120.50">
+                            <div class="invalid-feedback">Please enter a valid non-negative price.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="food-description" class="form-label">Description</label>
+                            <textarea class="form-control" id="food-description" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="food-image" class="form-label">Image URL</label>
+                            <input type="url" class="form-control" id="food-image" placeholder="https://example.com/image.jpg">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="food-rating" class="form-label">Rating (0-5)</label>
+                                <input type="number" step="0.1" min="0" max="5" class="form-control" id="food-rating" placeholder="e.g., 4.5">
+                             </div>
+                             <div class="col-md-6 mb-3">
+                                <label for="food-reviews" class="form-label">Reviews Count</label>
+                                <input type="number" min="0" class="form-control" id="food-reviews" placeholder="e.g., 128">
+                            </div>
+                        </div>
+                         <div class="mb-3">
+                            <label for="food-category" class="form-label">Category (space-separated)</label>
+                            <input type="text" class="form-control" id="food-category" placeholder="e.g., seafood japanese appetizer">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="food-country" class="form-label">Country</label>
+                                <input type="text" class="form-control" id="food-country" placeholder="e.g., Japan">
+                            </div>
+                             <div class="col-md-6 mb-3">
+                                <label for="food-country-img" class="form-label">Country Flag Image URL</label>
+                                <input type="url" class="form-control" id="food-country-img" placeholder="https://example.com/flag.png">
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary cancel-btn" data-target="food-list-panel">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Food Item</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+         <div id="orders-list-panel" class="content-panel">
+            <div class="card section-card shadow-sm">
+                 <div class="card-header">
+                     <span><i class="fas fa-receipt"></i> Manage Orders</span>
+                 </div>
+                 <div class="card-body">
+                     <div class="table-responsive">
+                         <table class="table table-striped table-hover table-bordered">
+                             <thead><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead>
+                             <tbody id="orders-table-body"></tbody>
+                         </table>
+                     </div>
+                 </div>
+             </div>
+        </div>
+
+        <div id="users-list-panel" class="content-panel">
+            <div class="card section-card shadow-sm">
+                 <div class="card-header">
+                     <span><i class="fas fa-users"></i> Manage Users</span>
+                     <button class="btn btn-primary btn-sm add-btn" data-form-target="user-form-panel" data-list-target="users-list-panel">
+                         <i class="fas fa-plus"></i> Add New User
+                     </button>
+                 </div>
+                 <div class="card-body">
+                     <div class="table-responsive">
+                         <table class="table table-striped table-hover table-bordered">
+                             <thead><tr><th>User ID</th><th>Name</th><th>Email</th><th>Actions</th></tr></thead>
+                             <tbody id="users-table-body"></tbody>
+                         </table>
+                     </div>
+                 </div>
+             </div>
+        </div>
+
+        <div id="user-form-panel" class="content-panel">
+             <div class="card section-card form-panel shadow-sm">
+                <div class="card-header" id="user-form-header">Add New User</div>
+                <div class="card-body">
+                     <form id="user-form" novalidate>
+                        <input type="hidden" id="user-edit-id">
+                        <input type="hidden" id="user-action-mode">
+
+                         <div class="mb-3">
+                            <label for="user-name" class="form-label">User Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="user-name" required>
+                             <div class="invalid-feedback">User name is required.</div>
+                        </div>
+                         <div class="mb-3">
+                            <label for="user-email" class="form-label">User Email <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="user-email" required placeholder="name@example.com">
+                            <div class="invalid-feedback">A valid email is required.</div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary cancel-btn" data-target="users-list-panel">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save User</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark">
+                    <h1 class="modal-title fs-5" id="confirmModalLabel"><i class="fas fa-exclamation-triangle"></i> Confirm Action</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmModalMessage">Are you sure?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmModalButton">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+
+        let stores = [];
+        let foodItems = [
+             { id: "sushi-01", name: "Sushi Platter", price: 42.99, image: "../admin/img/sushi.jpg", description: "Authentic assortment of fresh nigiri and maki rolls prepared by a master chef.", vendor: "Sakura Kitchen", rating: "4.5", reviews: "128", country: "Japan", countryImg: "https://readdy.ai/api/search-image?query=Japanese%20flag%20icon%2C%20simple%20flat%20design&width=20&height=20&seq=flag1&orientation=squarish", category: "seafood" },
+             { id: "chicken-01", name: "Butter Chicken w/ Naan", price: 50.00, image: "../admin/img/butterchickenwnaan.jpg", vendor: "Spice Route", rating: "4.0", reviews: "95", country: "India", countryImg: "https://readdy.ai/api/search-image?query=Indian%20flag%20icon%2C%20simple%20flat%20design&width=20&height=20&seq=flag2&orientation=squarish", category: "meat curry" },
+             { id: "pasta-01", name: "Authentic Carbonara", price: 40.50, image: "../user/Creamy Chicken Carbonara Recipe.jpg", category: "pasta meat" },
+             { id: "gimbap-01", name: "Gimbap Rolls", price: 35.75, image: "../user/Gimbap (Korean Seaweed Rice Rolls) _ Sift & Simmer.jpg", description: "Flavorful Korean seaweed rice rolls packed with fresh vegetables and fillings.", vendor: "Seoul Bites", rating: "4.3", reviews: "61", country: "South Korea", countryImg: "https://readdy.ai/api/search-image?query=South%20Korean%20flag%20icon%2C%20simple%20flat%20design&width=20&height=20&seq=flag4&orientation=squarish", category: "vegetarian meat seafood" },
+             { id: "pizza-01", name: "Margherita Pizza", price: 38.00, image: "../admin/img/pizzam.jpg", category: "pizza vegetarian" },
+             { id: "noodles-01", name: "Pad Thai (Shrimp/Tofu)", price: 45.50, image: "../admin/img/padthai.jpg", category: "noodles seafood vegetarian" },
+             { id: "dessert-01", name: "Chocolate Lava Cake", price: 28.00, image: "../admin/img/chococake.jpg", category: "dessert" },
+             { id: "mexican-01", name: "Street Style Beef Tacos (3)", price: 33.25, image: "../admin/img/beeftaco.jpg", category: "meat mexican" },
+             { id: "wrap-01", name: "Falafel Wrap", price: 30.00, image: "../admin/img/falafelwrap.jpg", category: "vegetarian wrap middle-eastern" },
+             { id: "ramen-01", name: "Hearty Miso Ramen", price: 48.00, image: "../admin/img/misoramen.jpg", category: "noodles soup meat" },
+             { id: "salad-01", name: "Classic Caesar Salad", price: 29.50, image: "../admin/img/CEASAR.jpg", description: "Crisp romaine, creamy dressing, garlic croutons, and Parmesan. (Chicken optional)", vendor: "The Green Leaf", rating: "4.2", reviews: "75", country: "USA", countryImg: "https://readdy.ai/api/search-image?query=USA%20flag%20icon%2C%20simple%20flat%20design&width=20&height=20&seq=flag9&orientation=squarish", category: "salad vegetarian meat" },
+             { id: "dessert-02", name: "Mango Sticky Rice", price: 25.00, image: "../admin/img/mangostickyrice.jpg", category: "dessert vegetarian" },
+             { id: "bbq-01", name: "Smoky BBQ Ribs (Full Rack)", price: 65.00, image: "../admin/img/smoky.jpg", category: "meat bbq" },
+        ];
+        let users = [ { id: '10001', name: "Adi Riv", email: "AdiRiv@gmail.com" }, { id: '10002', name: "Adrian Benedict", email: "adiibenn@gmail.com" }, { id: '10003', name: "Gwyneth Bagnaan", email: "bagnaan@gmail.com" }, { id: '10004', name: "Jessa Mae Ferrer", email: "jessa@gmail.com"} ];
+        let orders = [ { id: '101', customerId: '10001', total: 50.00, status: 'Pending' }, { id: '102', customerId: '10002', total: 230.00, status: 'Delivered' }, { id: '103', customerId: '10001', total: 110.00, status: 'Preparing' }, { id: '104', customerId: '10003', total: 42.99, status: 'Out for Delivery'}, { id: '105', customerId: '10004', total: 65.00, status: 'Delivered'}, { id: '106', customerId: '10001', total: 40.50, status: 'Cancelled'}];
+
+        let nextStoreId = 1000;
+        let nextUserId = 10005;
+        let nextFoodIdCounter = 100;
+        let nextOrderId = 107;
+
+        const mainContent = document.querySelector('main');
+        const mainHeading = document.getElementById('main-heading');
+        const sidebarLinks = document.querySelectorAll('aside .nav-link');
+        const contentPanels = document.querySelectorAll('.content-panel');
+
+        const storeTableBody = document.getElementById('stores-table-body');
+        const userTableBody = document.getElementById('users-table-body');
+        const foodTableBody = document.getElementById('food-table-body');
+        const ordersTableBody = document.getElementById('orders-table-body');
+        const recentOrdersTableBody = document.getElementById('recent-orders-table-body');
+
+        const storeForm = document.getElementById('store-form');
+        const storeFormHeader = document.getElementById('store-form-header');
+        const storeEditIdInput = document.getElementById('store-edit-id');
+        const storeActionModeInput = document.getElementById('store-action-mode');
+        const storeNameInput = document.getElementById('store-name');
+
+        const userForm = document.getElementById('user-form');
+        const userFormHeader = document.getElementById('user-form-header');
+        const userEditIdInput = document.getElementById('user-edit-id');
+        const userActionModeInput = document.getElementById('user-action-mode');
+        const userNameInput = document.getElementById('user-name');
+        const userEmailInput = document.getElementById('user-email');
+
+        const foodForm = document.getElementById('food-form');
+        const foodFormHeader = document.getElementById('food-form-header');
+        const foodEditIdInput = document.getElementById('food-edit-id');
+        const foodActionModeInput = document.getElementById('food-action-mode');
+        const foodStoreIdSelect = document.getElementById('food-store-id');
+        const foodNameInput = document.getElementById('food-name');
+        const foodPriceInput = document.getElementById('food-price');
+        const foodDescriptionInput = document.getElementById('food-description');
+        const foodImageInput = document.getElementById('food-image');
+        const foodRatingInput = document.getElementById('food-rating');
+        const foodReviewsInput = document.getElementById('food-reviews');
+        const foodCategoryInput = document.getElementById('food-category');
+        const foodCountryInput = document.getElementById('food-country');
+        const foodCountryImgInput = document.getElementById('food-country-img');
+
+        const confirmModalElement = document.getElementById('confirmModal');
+        const confirmModal = new bootstrap.Modal(confirmModalElement);
+        const confirmModalMessage = document.getElementById('confirmModalMessage');
+        const confirmModalButton = document.getElementById('confirmModalButton');
+
+        let orderStatusChart = null;
+        let foodItemsPerStoreChart = null;
+
+        function showPanel(panelId) {
+             contentPanels.forEach(panel => panel.classList.remove('active'));
+             const targetPanel = document.getElementById(panelId);
+             if (targetPanel) {
+                 targetPanel.classList.add('active');
+                 const panelTitleElement = targetPanel.querySelector('h2, .card-header span');
+                 const panelTitle = panelTitleElement?.textContent.trim();
+                 const link = document.querySelector(`aside .nav-link[data-target="${panelId}"]`);
+                 mainHeading.textContent = panelTitle || (link ? link.textContent.trim().replace(/^[^\w]+/, '') : "Admin Dashboard");
+             } else {
+                 const overviewPanel = document.getElementById('dashboard-overview-panel');
+                 if(overviewPanel) overviewPanel.classList.add('active');
+                 mainHeading.textContent = "Dashboard Overview";
+             }
+             sidebarLinks.forEach(link => {
+                 link.classList.remove('active');
+                 if (link.dataset.target === panelId) link.classList.add('active');
+             });
+             if (panelId === 'dashboard-overview-panel') {
+                 updateCharts();
+             }
+             mainContent.scrollTop = 0;
+        }
+
+        function renderStoresTable() {
+            storeTableBody.innerHTML = '';
+            if (stores.length === 0) { storeTableBody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-3">No stores found.</td></tr>'; return; }
+            stores.forEach(store => {
+                const itemCount = foodItems.filter(item => item.storeId === store.id).length;
+                const row = document.createElement('tr'); row.setAttribute('data-id', store.id);
+                row.innerHTML = `
+                    <td>${store.id}</td>
+                    <td>${store.name}</td>
+                    <td>${itemCount}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-outline-warning btn-sm edit-btn" data-type="store" data-id="${store.id}" data-form-target="store-form-panel" title="Edit Store"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-outline-danger btn-sm delete-btn" data-type="store" data-id="${store.id}" title="Delete Store"><i class="fas fa-trash-alt"></i></button>
+                    </td> `;
+                storeTableBody.appendChild(row);
+            });
+        }
+        function renderUsersTable() {
+             userTableBody.innerHTML = '';
+             if (users.length === 0) { userTableBody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-3">No users found.</td></tr>'; return; }
+             users.forEach(user => {
+                 const row = document.createElement('tr'); row.setAttribute('data-id', user.id);
+                 row.innerHTML = `
+                    <td>${user.id}</td><td>${user.name}</td><td>${user.email}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-outline-warning btn-sm edit-btn" data-type="user" data-id="${user.id}" data-form-target="user-form-panel" title="Edit User"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-outline-danger btn-sm delete-btn" data-type="user" data-id="${user.id}" title="Delete User"><i class="fas fa-trash-alt"></i></button>
+                    </td> `;
+                 userTableBody.appendChild(row);
+             });
+        }
+        function renderFoodTable() {
+             foodTableBody.innerHTML = '';
+             if (foodItems.length === 0) { foodTableBody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-3">No food items found.</td></tr>'; return; }
+             foodItems.forEach(item => {
+                 const store = stores.find(s => s.id === item.storeId);
+                 const storeName = store ? store.name : 'Unknown Store';
+                 const row = document.createElement('tr'); row.setAttribute('data-id', item.id);
+                 row.innerHTML = `
+                     <td><img src="${item.image || 'https://via.placeholder.com/50x50?text=N/A'}" alt="${item.name}" class="food-thumb"></td>
+                     <td>${item.name}</td>
+                     <td>${storeName}</td>
+                     <td>₱${item.price.toFixed(2)}</td>
+                     <td>${item.rating || '-'} <i class="fas fa-star text-warning"></i></td>
+                     <td>${item.category || '-'}</td>
+                     <td class="action-buttons">
+                         <button class="btn btn-outline-warning btn-sm edit-btn" data-type="food" data-id="${item.id}" data-form-target="food-form-panel" title="Edit Food Item"><i class="fas fa-edit"></i></button>
+                         <button class="btn btn-outline-danger btn-sm delete-btn" data-type="food" data-id="${item.id}" title="Delete Food Item"><i class="fas fa-trash-alt"></i></button>
+                     </td>`;
+                 foodTableBody.appendChild(row);
+             });
+        }
+        function renderOrdersTable() {
+             ordersTableBody.innerHTML = '';
+             if (orders.length === 0) { ordersTableBody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-3">No orders found.</td></tr>'; return; }
+             orders.forEach(order => {
+                 const user = users.find(u => u.id === order.customerId);
+                 const customerName = user ? user.name : `User ID ${order.customerId || 'N/A'}`;
+                 let statusBadgeClass = 'bg-secondary';
+                 if (order.status === 'Pending') statusBadgeClass = 'bg-warning text-dark'; else if (order.status === 'Preparing') statusBadgeClass = 'bg-info text-dark'; else if (order.status === 'Out for Delivery') statusBadgeClass = 'bg-primary'; else if (order.status === 'Delivered') statusBadgeClass = 'bg-success'; else if (order.status === 'Cancelled') statusBadgeClass = 'bg-danger';
+                 const row = document.createElement('tr'); row.setAttribute('data-id', order.id);
+                 row.innerHTML = `
+                    <td>${order.id}</td><td>${customerName}</td><td>₱${order.total.toFixed(2)}</td><td><span class="badge ${statusBadgeClass} px-2 py-1">${order.status}</span></td>
+                    <td class="action-buttons">
+                        <button class="btn btn-outline-info btn-sm status-btn" data-type="order" data-id="${order.id}" title="Update Status"><i class="fas fa-sync-alt"></i></button>
+                        <button class="btn btn-outline-danger btn-sm delete-btn" data-type="order" data-id="${order.id}" title="Delete Order"><i class="fas fa-trash-alt"></i></button>
+                    </td>`;
+                 ordersTableBody.appendChild(row);
+             });
+        }
+        function renderRecentOrdersTable() {
+            if (!recentOrdersTableBody) return;
+            recentOrdersTableBody.innerHTML = '';
+            const recent = orders.slice(-5).reverse(); 
+             if (recent.length === 0) { recentOrdersTableBody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-3">No recent orders.</td></tr>'; return; }
+             recent.forEach(order => {
+                 const user = users.find(u => u.id === order.customerId);
+                 const customerName = user ? user.name : `User ID ${order.customerId || 'N/A'}`;
+                 let statusBadgeClass = 'bg-secondary';
+                 if (order.status === 'Pending') statusBadgeClass = 'bg-warning text-dark'; else if (order.status === 'Preparing') statusBadgeClass = 'bg-info text-dark'; else if (order.status === 'Out for Delivery') statusBadgeClass = 'bg-primary'; else if (order.status === 'Delivered') statusBadgeClass = 'bg-success'; else if (order.status === 'Cancelled') statusBadgeClass = 'bg-danger';
+                 const row = document.createElement('tr'); row.setAttribute('data-id', order.id);
+                 row.innerHTML = `
+                    <td>${order.id}</td><td>${customerName}</td><td>₱${order.total.toFixed(2)}</td><td><span class="badge ${statusBadgeClass} px-2 py-1">${order.status}</span></td>`;
+                 recentOrdersTableBody.appendChild(row);
+             });
+        }
+
+
+        function updateStats() {
+            document.getElementById('total-stores').textContent = stores.length;
+            document.getElementById('total-users').textContent = users.length;
+            document.getElementById('total-food-items').textContent = foodItems.length;
+            document.getElementById('total-orders').textContent = orders.length;
+            document.getElementById('pending-orders').textContent = orders.filter(o => o.status === 'Pending').length; // Update pending orders
+            const totalRevenue = orders.filter(o => o.status === 'Delivered').reduce((sum, order) => sum + order.total, 0);
+            document.getElementById('total-revenue').textContent = `₱${totalRevenue.toFixed(2)}`;
+        }
+
+        function clearFormValidation(formElement) {
+            formElement.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+            formElement.reset();
+        }
+        function setupFormPanel(type, mode = 'add', id = null) {
+             let formElement, headerElement, idInput, modeInput, targetPanelId;
+             switch (type) {
+                case 'store': formElement = storeForm; headerElement = storeFormHeader; idInput = storeEditIdInput; modeInput = storeActionModeInput; targetPanelId = 'store-form-panel'; break;
+                case 'user': formElement = userForm; headerElement = userFormHeader; idInput = userEditIdInput; modeInput = userActionModeInput; targetPanelId = 'user-form-panel'; break;
+                case 'food':
+                    formElement = foodForm; headerElement = foodFormHeader; idInput = foodEditIdInput; modeInput = foodActionModeInput; targetPanelId = 'food-form-panel';
+                     foodStoreIdSelect.innerHTML = '<option value="">Select a store...</option>';
+                     stores.forEach(store => { const option = document.createElement('option'); option.value = store.id; option.textContent = `${store.name} (${store.id})`; foodStoreIdSelect.appendChild(option); });
+                     break;
+                default: return;
+            }
+            clearFormValidation(formElement);
+            modeInput.value = mode; idInput.value = id || '';
+            if (mode === 'edit' && id) {
+                headerElement.textContent = `Edit ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+                let item;
+                let idToCompare = id;
+                if(type === 'store') idToCompare = parseInt(id, 10);
+
+                 switch (type) {
+                    case 'store': item = stores.find(s => s.id === idToCompare); if(item) storeNameInput.value = item.name; break;
+                    case 'user': item = users.find(u => u.id === idToCompare); if(item) { userNameInput.value = item.name; userEmailInput.value = item.email; } break;
+                    case 'food':
+                        item = foodItems.find(f => f.id === idToCompare);
+                        if(item) {
+                             foodStoreIdSelect.value = item.storeId;
+                             foodNameInput.value = item.name;
+                             foodPriceInput.value = item.price;
+                             foodDescriptionInput.value = item.description || '';
+                             foodImageInput.value = item.image || '';
+                             foodRatingInput.value = item.rating || '';
+                             foodReviewsInput.value = item.reviews || '';
+                             foodCategoryInput.value = item.category || '';
+                             foodCountryInput.value = item.country || '';
+                             foodCountryImgInput.value = item.countryImg || '';
+                         }
+                        break;
+                }
+                 if (!item) {
+                    alert("Error: Could not find the item to edit.");
+                    showPanel(`${type}s-list-panel`); return;
+                 }
+            } else { headerElement.textContent = `Add New ${type.charAt(0).toUpperCase() + type.slice(1)}`; }
+            showPanel(targetPanelId);
+        }
+        function validateForm(formElement) {
+             let isValid = true;
+             formElement.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+             const inputs = formElement.querySelectorAll('input[required], select[required], textarea[required]');
+             inputs.forEach(input => {
+                 let inputValid = true; const value = input.value.trim();
+                 if (input.required && !value) { inputValid = false; }
+                 if (input.type === 'email' && value && !/^\S+@\S+\.\S+$/.test(value)) { inputValid = false; }
+                 if (input.type === 'number' && input.value !== '' && (isNaN(parseFloat(input.value)) || (input.min && parseFloat(input.value) < parseFloat(input.min)) || (input.max && parseFloat(input.value) > parseFloat(input.max)))) { inputValid = false; }
+                 if (!inputValid) { isValid = false; input.classList.add('is-invalid'); }
+             });
+             return isValid;
+        }
+
+        function prepareOrderStatusData() {
+            const statusCounts = {};
+            const statuses = ['Pending', 'Preparing', 'Out for Delivery', 'Delivered', 'Cancelled'];
+            statuses.forEach(status => statusCounts[status] = 0);
+            orders.forEach(order => {
+                if (statusCounts.hasOwnProperty(order.status)) {
+                    statusCounts[order.status]++;
+                } else {
+                    statusCounts[order.status] = 1;
+                }
+            });
+            return {
+                labels: Object.keys(statusCounts),
+                data: Object.values(statusCounts)
+            };
+        }
+
+        function prepareFoodItemsPerStoreData() {
+            const itemsPerStore = {};
+            if (stores.length === 0) generateStoreDataFromFoodItems();
+
+            stores.forEach(store => itemsPerStore[store.name] = 0);
+            foodItems.forEach(item => {
+                const store = stores.find(s => s.id === item.storeId);
+                if (store && itemsPerStore.hasOwnProperty(store.name)) {
+                    itemsPerStore[store.name]++;
+                }
+            });
+            const filteredLabels = Object.keys(itemsPerStore);
+            const filteredData = filteredLabels.map(label => itemsPerStore[label]);
+            return {
+                labels: filteredLabels,
+                data: filteredData
+            };
+        }
+
+        function initializeCharts() {
+            const orderStatusCtx = document.getElementById('orderStatusChart');
+            const foodItemsCtx = document.getElementById('foodItemsPerStoreChart');
+
+            if (!orderStatusCtx || !foodItemsCtx) return;
+
+            const orderData = prepareOrderStatusData();
+            const foodData = prepareFoodItemsPerStoreData();
+
+            if (orderStatusChart) { orderStatusChart.destroy(); }
+            orderStatusChart = new Chart(orderStatusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: orderData.labels,
+                    datasets: [{
+                        label: 'Orders by Status',
+                        data: orderData.data,
+                        backgroundColor: ['#ffc107','#0dcaf0','#0d6efd','#198754','#dc3545'],
+                        hoverOffset: 4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            if (foodItemsPerStoreChart) { foodItemsPerStoreChart.destroy(); }
+            foodItemsPerStoreChart = new Chart(foodItemsCtx, {
+                type: 'bar',
+                data: {
+                    labels: foodData.labels,
+                    datasets: [{
+                        label: '# of Food Items',
+                        data: foodData.data,
+                        backgroundColor: 'rgba(220, 53, 69, 0.6)',
+                        borderColor: 'rgba(220, 53, 69, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                }
+            });
+        }
+
+        function updateCharts() {
+             if (!document.getElementById('dashboard-overview-panel')?.classList.contains('active')) {
+                 return;
+             }
+             if (!Chart) { return; }
+
+             try {
+                 if (orderStatusChart) {
+                    const orderData = prepareOrderStatusData();
+                    orderStatusChart.data.labels = orderData.labels;
+                    orderStatusChart.data.datasets[0].data = orderData.data;
+                    orderStatusChart.update('none'); 
+                 } else { initializeCharts(); }
+
+                 if (foodItemsPerStoreChart) {
+                    const foodData = prepareFoodItemsPerStoreData();
+                    foodItemsPerStoreChart.data.labels = foodData.labels;
+                    foodItemsPerStoreChart.data.datasets[0].data = foodData.data;
+                    foodItemsPerStoreChart.update('none');
+                 } else { initializeCharts(); }
+             } catch (error) {
+                console.error("Error updating charts:", error);
+             }
+        }
+
+
+        sidebarLinks.forEach(link => {
+             link.addEventListener('click', (e) => { e.preventDefault(); const targetPanelId = link.dataset.target; if (targetPanelId) showPanel(targetPanelId); });
+        });
+
+        mainContent.addEventListener('click', (e) => {
+             const button = e.target.closest('button, a'); 
+            if (!button) return;
+
+            if (button.classList.contains('add-btn')) { const formTarget = button.dataset.formTarget; const type = formTarget.split('-')[0]; setupFormPanel(type, 'add'); }
+            else if (button.classList.contains('edit-btn')) { const type = button.dataset.type; const id = button.dataset.id; setupFormPanel(type, 'edit', id); }
+            else if (button.classList.contains('delete-btn')) {
+                 const type = button.dataset.type; const id = button.dataset.id; let itemName = ''; let itemArray; let idToCompare = id;
+                 switch (type) {
+                     case 'store':
+                         itemArray = stores;
+                         idToCompare = parseInt(id, 10);
+                         itemName = itemArray.find(i => i.id === idToCompare)?.name;
+                         break;
+                     case 'user': itemArray = users; itemName = itemArray.find(i => i.id === idToCompare)?.name; break;
+                     case 'food': itemArray = foodItems; itemName = itemArray.find(i => i.id === idToCompare)?.name; break;
+                     case 'order': itemArray = orders; itemName = `Order #${idToCompare}`; break;
+                     default: return;
+                 }
+                 if (!itemName) itemName = `Item ID ${id}`;
+                 confirmModalMessage.textContent = `Are you sure you want to delete ${type} "${itemName}" (ID: ${id})? This action cannot be undone.`;
+                 confirmModalButton.dataset.deleteType = type;
+                 confirmModalButton.dataset.deleteId = id;
+                 confirmModalButton.textContent = 'Yes, Delete';
+                 confirmModalButton.classList.remove('btn-info');
+                 confirmModalButton.classList.add('btn-danger');
+                 confirmModal.show();
+            }
+            else if (button.classList.contains('cancel-btn')) { const targetListPanel = button.dataset.target; if (targetListPanel) showPanel(targetListPanel); }
+            else if (button.classList.contains('status-btn')) {
+                 const orderId = button.dataset.id; const order = orders.find(o => o.id === orderId);
+                 if(order) {
+                    const statuses = ['Pending', 'Preparing', 'Out for Delivery', 'Delivered', 'Cancelled'];
+                     const currentIndex = statuses.indexOf(order.status);
+                     const nextIndex = (currentIndex + 1) % statuses.length;
+                     order.status = statuses[nextIndex];
+                     renderOrdersTable(); updateStats(); updateCharts(); renderRecentOrdersTable(); 
+                 }
+            }
+      
+             else if (button.classList.contains('view-all-link')) {
+                 e.preventDefault(); 
+                 const targetPanel = button.dataset.target;
+                 if (targetPanel) {
+                     showPanel(targetPanel);
+                 }
+            }
+        });
+
+        confirmModalButton.addEventListener('click', () => {
+            const type = confirmModalButton.dataset.deleteType; const id = confirmModalButton.dataset.deleteId;
+            if (!type || !id) { confirmModal.hide(); return; }
+            let itemArray, renderFunc, idToCompare = id;
+            switch (type) {
+                 case 'store':
+                     itemArray = stores;
+                     renderFunc = renderStoresTable;
+                     idToCompare = parseInt(id, 10);
+                     if (foodItems.some(item => item.storeId === idToCompare)) {
+                         alert(`Cannot delete store "${stores.find(s=>s.id === idToCompare)?.name}". Please delete its associated food items first.`);
+                         confirmModal.hide();
+                         return;
+                     }
+                     break;
+                 case 'user': itemArray = users; renderFunc = renderUsersTable; break;
+                 case 'food': itemArray = foodItems; renderFunc = renderFoodTable; break;
+                 case 'order': itemArray = orders; renderFunc = renderOrdersTable; break;
+                 default: confirmModal.hide(); return;
+             }
+            const index = itemArray.findIndex(item => item.id === idToCompare);
+            if (index > -1) {
+                 itemArray.splice(index, 1);
+                 renderFunc(); 
+                 updateStats();
+                 updateCharts();
+                 if(type === 'order') renderRecentOrdersTable(); 
+                 if(type === 'store') generateStoreDataFromFoodItems(); 
+             }
+            delete confirmModalButton.dataset.deleteType; delete confirmModalButton.dataset.deleteId;
+            confirmModal.hide();
+        });
+
+        function handleFormSubmit(e, formType) {
+             e.preventDefault();
+             let formElement, idInput, modeInput, dataArray, renderFunc, listPanelId, itemData = {};
+             switch (formType) {
+                case 'store':
+                    formElement = storeForm; idInput = storeEditIdInput; modeInput = storeActionModeInput; dataArray = stores; renderFunc = renderStoresTable; listPanelId = 'stores-list-panel';
+                    itemData = { name: storeNameInput.value.trim() };
+                    break;
+                case 'user':
+                    formElement = userForm; idInput = userEditIdInput; modeInput = userActionModeInput; dataArray = users; renderFunc = renderUsersTable; listPanelId = 'users-list-panel';
+                    itemData = { name: userNameInput.value.trim(), email: userEmailInput.value.trim() };
+                    break;
+                case 'food':
+                    formElement = foodForm; idInput = foodEditIdInput; modeInput = foodActionModeInput; dataArray = foodItems; renderFunc = renderFoodTable; listPanelId = 'food-list-panel';
+                    const priceValue = parseFloat(foodPriceInput.value);
+                    const storeIdValue = parseInt(foodStoreIdSelect.value, 10);
+                    itemData = {
+                        storeId: isNaN(storeIdValue) ? null : storeIdValue,
+                        name: foodNameInput.value.trim(),
+                        price: isNaN(priceValue) ? null : priceValue,
+                        description: foodDescriptionInput.value.trim(),
+                        image: foodImageInput.value.trim(),
+                        rating: foodRatingInput.value.trim(),
+                        reviews: foodReviewsInput.value.trim(),
+                        category: foodCategoryInput.value.trim(),
+                        country: foodCountryInput.value.trim(),
+                        countryImg: foodCountryImgInput.value.trim()
+                    };
+                    Object.keys(itemData).forEach(key => {
+                         if (itemData[key] === '' || itemData[key] === null) {
+                              delete itemData[key];
+                          }
+                      });
+                     if (!itemData.storeId || !itemData.name || itemData.price === null) {
+                         alert("Store, Name, and Price are required for food items.");
+                         return;
+                     }
+                    break;
+                default: return;
+             }
+             if (!validateForm(formElement)) { return; }
+             const mode = modeInput.value; const id = idInput.value;
+
+             if (mode === 'edit' && id) {
+                  let idToCompare = id;
+                  if(formType === 'store') idToCompare = parseInt(id, 10);
+                 const index = dataArray.findIndex(item => item.id === idToCompare);
+                 if (index > -1) { dataArray[index] = { ...dataArray[index], ...itemData }; }
+             } else {
+                 if (formType === 'store') { itemData.id = nextStoreId++; }
+                 else if (formType === 'user') { itemData.id = nextUserId.toString(); nextUserId++; }
+                 else if (formType === 'food') { itemData.id = `f-${nextFoodIdCounter++}`; }
+                 else { itemData.id = `${formType}-${Date.now()}`; }
+
+                 dataArray.push(itemData);
+             }
+
+             if(formType === 'store' || formType === 'food'){
+                 if (formType === 'store') {
+                    generateStoreDataFromFoodItems();
+                    renderStoresTable();
+                 }
+                 if(document.getElementById('food-form-panel').classList.contains('active') || formType === 'store') {
+                    const currentFoodStoreId = foodStoreIdSelect.value;
+                    foodStoreIdSelect.innerHTML = '<option value="">Select a store...</option>';
+                    stores.forEach(store => { const option = document.createElement('option'); option.value = store.id; option.textContent = `${store.name} (${store.id})`; foodStoreIdSelect.appendChild(option); });
+                    foodStoreIdSelect.value = currentFoodStoreId;
+                 }
+             }
+
+             renderFunc(); updateStats(); updateCharts(); renderRecentOrdersTable(); 
+             showPanel(listPanelId);
+        }
+
+        storeForm.addEventListener('submit', (e) => handleFormSubmit(e, 'store'));
+        userForm.addEventListener('submit', (e) => handleFormSubmit(e, 'user'));
+        foodForm.addEventListener('submit', (e) => handleFormSubmit(e, 'food'));
+
+        function generateStoreDataFromFoodItems() {
+            const vendors = new Map();
+            let maxExistingStoreId = 999;
+
+            foodItems.forEach(item => {
+                let storeIdForFoodItem = item.storeId;
+
+                if (item.vendor) {
+                    if (!vendors.has(item.vendor)) {
+                        const newStoreId = nextStoreId++;
+                        vendors.set(item.vendor, newStoreId);
+                        maxExistingStoreId = Math.max(maxExistingStoreId, newStoreId - 1);
+                        storeIdForFoodItem = newStoreId;
+                    } else {
+                        storeIdForFoodItem = vendors.get(item.vendor);
+                    }
+                } else {
+                     storeIdForFoodItem = (typeof item.storeId === 'number' && item.storeId >= 1000) ? item.storeId : null;
+                }
+                item.storeId = storeIdForFoodItem;
+            });
+
+            stores = Array.from(vendors.entries()).map(([name, id]) => ({ id: parseInt(id, 10), name }));
+            nextStoreId = Math.max(nextStoreId, maxExistingStoreId + 1);
+         }
+
+        function initializeDashboard() {
+            generateStoreDataFromFoodItems();
+
+            const currentUserIds = users.map(user => parseInt(user.id, 10)).filter(id => !isNaN(id));
+            if (currentUserIds.length > 0) { nextUserId = Math.max(...currentUserIds) + 1; }
+            nextUserId = Math.max(nextUserId, 10001);
+
+            renderStoresTable(); renderUsersTable(); renderFoodTable(); renderOrdersTable();
+            renderRecentOrdersTable(); 
+            updateStats();
+            initializeCharts();
+            showPanel('dashboard-overview-panel');
+        }
+        initializeDashboard();
+
+      });
+    </script>
+
+</body>
+</html>
